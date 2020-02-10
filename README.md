@@ -47,8 +47,9 @@
       1. 角座金/小形角
       2. 角座金/大形角
 4. 「JIS/ISO 規格の螺子に対応」する「スペーサー」類を生成できます
-   1. 丸スペーサー
-   2. 六角スペーサー
+   1. 上部/下部それぞれ凸螺子付き/凹螺子付き/螺子なし/ただの穴(螺子山なし谷底隙間相当のクリアランスあり)に対応
+      1. スペーサー、足、連結を造形できます
+   2. 胴体は外径指定できる丸、二面幅指定できる六角、その他の四角、八角などお好みの任意角に対応
 5. その他
    1. 規格外の設定値を与えるとわりと優しく丁寧なECHOでどのパラメーターが規格外か注意を表示したり適当な候補を表示したりしてくれます
 
@@ -62,8 +63,6 @@ Note: 将来的にライブラリーをヘッダーとAPIドキュメンテー�
 ## Screenshots
 
 https://imgur.com/a/e6oNACb
-
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/e6oNACb"><a href="//imgur.com/a/e6oNACb">Screenshots of usagi.scad https://github.com/usagi/usagi.scad</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 ## Contribution
 
