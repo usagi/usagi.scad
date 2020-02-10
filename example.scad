@@ -75,7 +75,7 @@ difference() // <- CROSS_SECTION 用の仕掛け
           spacer( 2, 3, -3, body_outer_diameter = 4, top_screw_pitch = -1 );
       }
     //
-    // より詳しい使い方は usagi.scad のはじめの方にある washer モジュールの定義とその上に書いた doxy 風のドキュメンテーションをどうぞ。
+    // より詳しい使い方は usagi.scad のはじめの方にある spacer モジュールの定義とその上に書いた doxy 風のドキュメンテーションをどうぞ。
     // --------------------------------
   }
 
