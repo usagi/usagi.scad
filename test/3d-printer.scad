@@ -18,7 +18,7 @@
 // 使用方法
 //   1. この .SCAD を .STL 等にエクスポートして3Dプリンターで造形します
 //      - 初期設定は分解能 0.05 [mm] のUV光造形向けで M2 系です。テスト環境や手持ちの規格品のネジやナットに併せて DIAMETER パラメーターを変更してください。
-//      - テスター側凸ネジ構造(規格品のナットはめ用)の高さ HEIGHT パラメーターは初期設定の 0 のままの場合、JIS規格のスタイル1ナットの高さに自動的に設定されます。
+//      - テスター側凸ネジ構造(規格品のナットはめ用)の高さ SCREW_LENGTH パラメーターは初期設定の 0 のままの場合、JIS規格のスタイル1ナットの高さに自動的に設定されます。
 //        - M8 など大きめの系で試す場合に造形時間や樹脂の使用量を節約したい、あるいはスタイル1ナット以外の高さに合わせたい場合は適当な値を設定してください。
 //      - SCALING_RANGE パラメーターを変更すると、テスターに造形するネジの凸/凹/溝幅を変えられます。
 //        - 初期設定では基準値 100% を中心に 0.5% 刻みで +1.5%, -1.5% までスケーリングしたテストポイントを造形します。
@@ -53,7 +53,7 @@ RESOLUTION = $preview ? RESOLUTION_IN_PREVIEW : RESOLUTION_IN_RENDER;
 // テスターのネジの呼び径
 DIAMETER = 2;
 // テスターの凸ネジ構造部分(ナットはめテスト用)の高さ。0を与えると自動的にJIS規格のスタイル1ナットの高さを採用します。
-HEIGHT = 0;
+SCREW_LENGTH = 0;
 // 本来の規格に対してスケーリングを施したテスターを用意する範囲を設定します
 SCALING_RANGE = [ 0.985 : 0.005 : 1.015 ];
 // 土台の高さ [mm]
@@ -87,7 +87,7 @@ REVISION = 0;
 include <../utility/text.scad>
 include <../usagi.scad>
 
-tester( DIAMETER, LENGTH, scaling_range = SCALING_RANGE );
+tester( DIAMETER, SCREW_LENGTH, scaling_range = SCALING_RANGE );
 
 module tester( diameter, length = 0, type = 0, scaling_range = [ 0.98 : 0.005 : 1.02 ] )
 {
@@ -95,7 +95,7 @@ module tester( diameter, length = 0, type = 0, scaling_range = [ 0.98 : 0.005 : 
 
   nut = get_JIS_B_1181_hex_nut_parameters( diameter );
   nut_outer_diameter = calculate_circumcircle_diameter( nut[ 0 ] );
-  nut_height = nut[ 1 ];
+  nut_height = length > 0 ? length : nut[ 1 ];
 
   who_am_i_texts = [ "JIS B 1177", "Hexagon socket set", str( "M", diameter ) ];
 
