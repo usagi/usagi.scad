@@ -53,6 +53,11 @@
 5. その他
    1. 規格外の設定値を与えるとわりと優しく丁寧なECHOでどのパラメーターが規格外か注意を表示したり適当な候補を表示したりしてくれます
 
+### Tester
+
+- [test/3d-printer.scad](test/3d-printer.scad)
+  - 3Dプリンターの精度をJIS/ISO規格の螺子やナットを使って簡単にテストできるテスター
+
 ## Usage
 
 1. `include <usagi.scad>`
@@ -119,11 +124,16 @@ usagi.scad は↓の YouTube で OpenSCAD における基礎的な歯車生成�
 12. 岡總株式会社 ISO規格 ISO 8.8 ISO 10.9 強力六角ボルト <http://www.okaso.co.jp/docs/business/product/product_iso.php>
 13. GlobalFastener.com <http://www.globalfastener.com/>
 14. JISC データベース検索 JIS検索 <https://www.jisc.go.jp/app/jis/general/GnrJISSearch.html>
+15. KEYCHATTER Unpacking The Kailh Box Switch Debacle <https://www.keychatter.com/2018/08/16/unpacking-the-kailh-box-switch-debacle/>
 
 ### Notes
 
-- JIS B 1176 = 六角穴付きボルト; Hexagon Socket Head Cap Screws
-- JIS B 1177 = 六角穴付き止めねじ; Hexagon Socket Set Screws
-- JIS B 1180 = 六角ボルト; Hexagon Head Screw Bolt
-- JIS B 1181 = 六角ナット; Hexagon Nut
-- JIS B 1256 = 平座金 (ワッシャー); Plain Washer
+- 部品
+  - JIS B 1176 = 六角穴付きボルト; Hexagon Socket Head Cap Screws
+  - JIS B 1177 = 六角穴付き止めねじ; Hexagon Socket Set Screws
+  - JIS B 1180 = 六角ボルト; Hexagon Head Screw Bolt
+  - JIS B 1181 = 六角ナット; Hexagon Nut
+  - JIS B 1256 = 平座金 (ワッシャー); Plain Washer
+- 工具
+  - JIS B 4648 = 六角棒スパナー (六角凹を回すスパナー)
+  - JIS B 4630 = スパナー (コの字で凸二面幅を捉えて回すスパナー)
