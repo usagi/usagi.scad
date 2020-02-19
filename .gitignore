@@ -3,3 +3,4 @@ example.json
 *.cws
 *.zip
 *.png
+.vscode/*

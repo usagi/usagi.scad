@@ -1,6 +1,7 @@
 # usagi.scad
 
 わたしが欲しい気がした JIS/ISO 規格に形だけでも互換性の高いボルト類やナットの造形が可能な OpenSCAD のライブラリーです。
+…でしたが、総合ライブラリー化してきました。
 
 ![sample_screenshot.png](sample_screenshot.png)
 
@@ -10,6 +11,48 @@
 2. JIS 規格に形だけでもそれなりに準拠したボルトやナットを造形できる OpenSCAD の便利のよさそうな OSS ライブラリーを見つけられなかった
 
 ## Feature
+
+- part/ 部品ライブラリー
+    - JIS規格ねじ ( 次節も参照 )
+    - ベアリング
+    - パイプ
+- geometry/ 形状ライブラリー
+    - arc.scad 弧を造形
+    - chamfered_square.scad 角ごとのC面取り/R面取りに対応した面取り長方形を造形
+    - generate_arc_vertices.scad 弧の頂点群を生成
+- utility
+    - vector/ vectorライブラリー
+        - multiply_vector.scad 1次/2次の vector と scalar の積(†1)
+        - pop_vector_block.scad 末尾から順序を変えずに部分要素群を取得
+        - pop_vector.scad 末尾からの逆順にした部分要素群を取得
+        - reverse.scad 並び順を逆順にした vector を取得
+        - shift_vector.scad 先頭からの部分要素群を取得
+        - slice_vector.scad 部分要素群を取得
+        - translate_vector.scad 座標リストを格納する2次のvectorの座標を平行移動(†1)
+    - number/ 数値ライブラリー
+        - count_integer_part_digits.scad 整数部分の桁を取得
+        - round_number_to_significant_figures.scad 有効数字で丸めた値を取得
+        - split_number_to_integer_and_fraction.scad 整数部分と小数部分を分離して取得
+    - text/ 文字列ライブラリー
+        - substring/ 部分文字列
+            - substring_left.scad 左端から一定文字数を取得
+            - substring_length.scad 部分文字列を始点位置と文字数から取得
+            - substring_range.scad 部分文字列を始点位置と末尾位置から取得
+            - substring_right.scad 右端から一定文字数を取得
+        - number_to_string_with_digit.scad 桁を指定して数値を文字列化
+    - angle/ 角度ライブラリー
+        - angle_step.scad 角度範囲のステップ角を生成
+        - distance_of_angle_range.scad 角度範囲の距離 (deg)
+        - make_angle_range.scad 角度範囲を生成
+        - normalize_angle.scad 角度を正規化
+
+(†1): ここでの用語と意図
+
+- 1次のvector:=[1,2,3]
+- 2次のvector:=[[1,2],[3,4],[5,6]]
+- 3次のvector:=[[[1,-1],[2,-2]],[[3,-3],[4,-4]],[[5,-5],[6,-6]]]
+
+### JIS規格ねじライブラリー部 ( part/screw.scad )
 
 1. JIS/ISO 規格を元にした造形の「メートルねじ」の「ボルト」類を生成できます
    1. JIS B 1176 六角穴付きボルト
@@ -123,10 +166,12 @@ usagi.scad は↓の YouTube で OpenSCAD における基礎的な歯車生成�
 11. 日本ねじ商工連盟 六角ボルト・ナット 附属書品から本体規格品への切り替えガイド <http://www.fij.or.jp/jis-guide/>
 12. 岡總株式会社 ISO規格 ISO 8.8 ISO 10.9 強力六角ボルト <http://www.okaso.co.jp/docs/business/product/product_iso.php>
 13. GlobalFastener.com <http://www.globalfastener.com/>
-14. JISC データベース検索 JIS検索 <https://www.jisc.go.jp/app/jis/general/GnrJISSearch.html>
-15. KEYCHATTER Unpacking The Kailh Box Switch Debacle <https://www.keychatter.com/2018/08/16/unpacking-the-kailh-box-switch-debacle/>
+14. KEYCHATTER Unpacking The Kailh Box Switch Debacle <https://www.keychatter.com/2018/08/16/unpacking-the-kailh-box-switch-debacle/>
+15. Misuri 【面取り加工】代表的なc面取りなどの方法や種類をVA・VE事例を交えて紹介! <https://mitsu-ri.net/articles/chamfer-corner-cut>
 
-### Notes
+### JIS 規格
+
+JISC データベース検索 JIS検索 <https://www.jisc.go.jp/app/jis/general/GnrJISSearch.html>
 
 - 部品
   - JIS B 1176 = 六角穴付きボルト; Hexagon Socket Head Cap Screws
@@ -137,3 +182,5 @@ usagi.scad は↓の YouTube で OpenSCAD における基礎的な歯車生成�
 - 工具
   - JIS B 4648 = 六角棒スパナー (六角凹を回すスパナー)
   - JIS B 4630 = スパナー (コの字で凸二面幅を捉えて回すスパナー)
+- 製図
+  - JIS B 0001 = 機械製図
