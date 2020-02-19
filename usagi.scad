@@ -1,10 +1,10 @@
 // JIS規格ねじ＆ボルトライブラリーは part/screw.scad へ整理しました
 // この usagi.scad を include するとライブラリーに含まれる全ての .scad を一括で include できます
 // 一部のみ使用したい場合は、ディレクトリーを漁って適当に include して下さい。
-include <angle/angle_step.scad>
-include <angle/distance_of_angle_range.scad>
-include <angle/make_angle_range.scad>
-include <angle/normalize_angle.scad>
+include <utility/angle/angle_step.scad>
+include <utility/angle/distance_of_angle_range.scad>
+include <utility/angle/make_angle_range.scad>
+include <utility/angle/normalize_angle.scad>
 include <coordinate/to_cartesian_from_polar.scad>
 include <geometry/arc.scad>
 include <geometry/chamfered_square.scad>
