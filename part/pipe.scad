@@ -26,14 +26,14 @@ module pipe
 , chamfering_type   = "C"
 
 // --- optional for detail level-1
-, chamfering_angle_inner = [ ]
-, chamfering_angle_outer = [ ]
+, inner_chamfering_angle = [ ]
+, outer_chamfering_angle = [ ]
 
-, chamfering_length_inner  = [ ]
-, chamfering_length_outer  = [ ]
+, inner_chamfering_length  = [ ]
+, outer_chamfering_length  = [ ]
 
-, chamfering_type_inner  = [ ]
-, chamfering_type_outer  = [ ]
+, inner_chamfering_type  = [ ]
+, outer_chamfering_type  = [ ]
 
 // --- optional for detail level-0 ( lowest )
 , inner_bottom_chamfering_angle = [ ]
@@ -64,14 +64,14 @@ module pipe
     , chamfering_length
     , chamfering_type  
 
-    , chamfering_angle_inner
-    , chamfering_angle_outer
+    , inner_chamfering_angle
+    , outer_chamfering_angle
 
-    , chamfering_length_inner
-    , chamfering_length_outer
+    , inner_chamfering_length
+    , outer_chamfering_length
 
-    , chamfering_type_inner
-    , chamfering_type_outer
+    , inner_chamfering_type
+    , outer_chamfering_type
 
     , inner_bottom_chamfering_angle
     , inner_top_chamfering_angle   
