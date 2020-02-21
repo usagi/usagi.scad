@@ -12,6 +12,8 @@ include <geometry/generate_arc_vertices.scad>
 include <part/bearing.scad>
 include <part/pipe.scad>
 include <part/screw.scad>
+include <part/shaft.scad>
+include <part/shaft_support_block.scad>
 include <utility/number.scad>
 include <utility/text.scad>
 include <utility/vector.scad>

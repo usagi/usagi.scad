@@ -13,9 +13,11 @@
 ## Feature
 
 - part/ 部品ライブラリー
-    - JIS規格ねじ ( 次節も参照 )
-    - ベアリング
-    - パイプ
+    - screw.scad JIS規格ねじ ( 次節も参照 )
+    - bearing.scad ベアリング
+    - pipie.scad パイプ
+    - shaft.scad シャフト
+    - shaft_support_block_T シャフトサポートブロックT型
 - geometry/ 形状ライブラリー
     - arc.scad 弧を造形
     - chamfered_square.scad 角ごとのC面取り/R面取りに対応した面取り長方形を造形
