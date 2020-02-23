@@ -37,11 +37,11 @@ module shaft
     , inner_bottom_chamfering_type    = [ ]
     , inner_top_chamfering_type       = [ ]
 
-    , outer_bottom_chamfering_angle   = top_chamfering_angle
-    , outer_top_chamfering_angle      = bottom_chamfering_angle
-    , outer_bottom_chamfering_length  = top_chamfering_length
-    , outer_top_chamfering_length     = bottom_chamfering_length
-    , outer_bottom_chamfering_type    = top_chamfering_type
-    , outer_top_chamfering_type       = bottom_chamfering_type
+    , outer_bottom_chamfering_angle   = bottom_chamfering_angle
+    , outer_top_chamfering_angle      = top_chamfering_angle
+    , outer_bottom_chamfering_length  = bottom_chamfering_length
+    , outer_top_chamfering_length     = top_chamfering_length
+    , outer_bottom_chamfering_type    = bottom_chamfering_type
+    , outer_top_chamfering_type       = top_chamfering_type
     );
 }
