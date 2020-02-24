@@ -3,16 +3,18 @@
 わたしが欲しい気がした JIS/ISO 規格に形だけでも互換性の高いボルト類やナットの造形が可能な OpenSCAD のライブラリーです。
 …でしたが、総合ライブラリー化してきました。
 
-<img alt="example-image-0" src="sample_screenshot.png" width= "24%"/>
-<img alt="example-image-1" src="https://i.imgur.com/A1qZMsb.png" width= "24%"/>
-<img alt="example-image-2" src="https://i.imgur.com/S2RtmBF.png" width= "24%"/>
-<img alt="example-image-3" src="https://i.imgur.com/JeeL3zn.png" width= "24%"/>
-
-
-<img alt="example-image-4" src="https://i.imgur.com/Rn2zTj2.png" width= "24%"/>
-<img alt="example-image-5" src="https://i.imgur.com/pSZbsJ3.png" width= "24%"/>
-<img alt="example-image-6" src="https://i.imgur.com/MmXjsTc.png" width= "24%"/>
-<img alt="example-image-7" src="https://i.imgur.com/3eO2KXM.png" width= "24%"/>
+<table>
+<tr>
+<td width="24%"><img float="left" alt="example-image-0" src="sample_screenshot.png"/>
+<td width="24%"><img float="left" alt="example-image-1" src="https://i.imgur.com/A1qZMsb.png"/>
+<td width="24%"><img float="left" alt="example-image-2" src="https://i.imgur.com/S2RtmBF.png"/>
+<td width="24%"><img float="left" alt="example-image-3" src="https://i.imgur.com/JeeL3zn.png"/>
+<tr>
+<td><img float="left" alt="example-image-4" src="https://i.imgur.com/Rn2zTj2.png"/>
+<td><img float="left" alt="example-image-5" src="https://i.imgur.com/pSZbsJ3.png"/>
+<td><img float="left" alt="example-image-6" src="https://i.imgur.com/MmXjsTc.png"/>
+<td><img float="left" alt="example-image-7" src="https://i.imgur.com/3eO2KXM.png"/>
+</table>
 
 ## Motivation
 
