@@ -3,7 +3,16 @@
 わたしが欲しい気がした JIS/ISO 規格に形だけでも互換性の高いボルト類やナットの造形が可能な OpenSCAD のライブラリーです。
 …でしたが、総合ライブラリー化してきました。
 
-![sample_screenshot.png](sample_screenshot.png)
+<img alt="example-image-0" src="sample_screenshot.png" width= "24%"/>
+<img alt="example-image-1" src="https://i.imgur.com/A1qZMsb.png" width= "24%"/>
+<img alt="example-image-2" src="https://i.imgur.com/S2RtmBF.png" width= "24%"/>
+<img alt="example-image-3" src="https://i.imgur.com/JeeL3zn.png" width= "24%"/>
+
+
+<img alt="example-image-4" src="https://i.imgur.com/Rn2zTj2.png" width= "24%"/>
+<img alt="example-image-5" src="https://i.imgur.com/pSZbsJ3.png" width= "24%"/>
+<img alt="example-image-6" src="https://i.imgur.com/MmXjsTc.png" width= "24%"/>
+<img alt="example-image-7" src="https://i.imgur.com/3eO2KXM.png" width= "24%"/>
 
 ## Motivation
 
@@ -116,13 +125,7 @@ Note: 将来的にライブラリーをヘッダーとAPIドキュメンテー�
 
 ## Screenshots
 
-https://imgur.com/a/e6oNACb に置きました。以下に一部を引用します:
-
-![Imgur](https://i.imgur.com/pSZbsJ3.png)
-![Imgur](https://i.imgur.com/S2RtmBF.png)
-![Imgur](https://i.imgur.com/JeeL3zn.png)
-![Imgur](https://i.imgur.com/A1qZMsb.png)
-![Imgur](https://i.imgur.com/3eO2KXM.png)
+https://imgur.com/a/e6oNACb に置きました。
 
 ## Contribution
 
