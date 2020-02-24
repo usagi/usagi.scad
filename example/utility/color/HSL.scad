@@ -1,7 +1,6 @@
-use <../../..//utility/color/HSL.scad>
+use <../../../utility/color/HSL.scad>
 
 $fn = 6;
-//$t = 0;
 
 for ( L = [ 0 : 1 / 6: 1 ] )
   for ( S = [ 0 : 1 / 5: 1 ] )

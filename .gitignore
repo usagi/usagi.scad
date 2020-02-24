@@ -3,4 +3,7 @@
 *.cws
 *.zip
 *.png
+*.apng
+*.gif
+*.mp4
 .vscode/*

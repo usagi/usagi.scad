@@ -115,7 +115,13 @@ Note: 将来的にライブラリーをヘッダーとAPIドキュメンテー�
 
 ## Screenshots
 
-https://imgur.com/a/e6oNACb
+https://imgur.com/a/e6oNACb に置きました。以下に一部を引用します:
+
+![Imgur](https://i.imgur.com/pSZbsJ3.png)
+![Imgur](https://i.imgur.com/S2RtmBF.png)
+![Imgur](https://i.imgur.com/JeeL3zn.png)
+![Imgur](https://i.imgur.com/A1qZMsb.png)
+![Imgur](https://i.imgur.com/3eO2KXM.png)
 
 ## Contribution
 
