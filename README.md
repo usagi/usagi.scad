@@ -17,10 +17,11 @@
     - bearing.scad ベアリング
     - pipie.scad パイプ
     - shaft.scad シャフト
-    - shaft_support_block_T シャフトサポートブロックT型
+    - shaft_support_block_T.scad シャフトサポートブロックT型
 - geometry/ 形状ライブラリー
     - arc.scad 弧を造形
-    - chamfered_square.scad 角ごとのC面取り/R面取りに対応した面取り長方形を造形
+    - chamfered_square.scad 4つの角ごとのC面取り/R面取りに対応した面取り長方形を造形
+    - chamfered_cube.scad 12の角ごとのC面取り/R面取りに対応した面取り立方体を造形
     - generate_arc_vertices.scad 弧の頂点群を生成
 - utility
     - vector/ vectorライブラリー
