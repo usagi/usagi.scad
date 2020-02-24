@@ -13,7 +13,7 @@ include <../utility/vector/translate_vector.scad>
 ///       chamfering_{angle|length|type}_{inner|outer}_{top|bottom} パラメーターは
 ///       4つの角それぞれで異なる面取りパラメーターを設定したい場合に使用します。
 module chamfered_square
-( size = [ 1, 1 ]
+( size
 // --- optional detail level-2 ( highest )
 , chamfering_angle  = 0
 , chamfering_length = 0
