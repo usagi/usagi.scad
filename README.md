@@ -35,6 +35,7 @@
         - count_integer_part_digits.scad 整数部分の桁を取得
         - round_number_to_significant_figures.scad 有効数字で丸めた値を取得
         - split_number_to_integer_and_fraction.scad 整数部分と小数部分を分離して取得
+        - clamp.scad 値を値域の範囲内へ丸める
     - text/ 文字列ライブラリー
         - substring/ 部分文字列
             - substring_left.scad 左端から一定文字数を取得
@@ -42,6 +43,8 @@
             - substring_range.scad 部分文字列を始点位置と末尾位置から取得
             - substring_right.scad 右端から一定文字数を取得
         - number_to_string_with_digit.scad 桁を指定して数値を文字列化
+    - color/ 色ライブラリー
+        - HSL.scad HSL色空間を扱う
     - angle/ 角度ライブラリー
         - angle_step.scad 角度範囲のステップ角を生成
         - distance_of_angle_range.scad 角度範囲の距離 (deg)
@@ -106,7 +109,7 @@
 ## Usage
 
 1. `include <usagi.scad>`
-2. [example.scad](example.scad) を眺めたり、必要なら [usagi.scad](usagi.scad) のソースコードコメントやソースコード本体を読んで使い方を察してお使い下さい。
+2. [example/part/screw.scad](example/part/screw.scad) を眺めたり、必要なら [usagi.scad](usagi.scad) のソースコードコメントやソースコード本体を読んで使い方を察してお使い下さい。
 
 Note: 将来的にライブラリーをヘッダーとAPIドキュメンテーション的な部分と実装詳細的な部分や機能単位に分割するカモしれません。気が向いたら。
 
@@ -136,7 +139,8 @@ Note: この repos ではリポジトリーの軽量を維持したいため .ST
 
 ## Author
 
-Usagi Ito
+- Name: Usagi Ito
+- Website: USAGI.NETWORK <https://usagi.network>
 
 ## Special Thanks
 
@@ -155,21 +159,27 @@ usagi.scad は↓の YouTube で OpenSCAD における基礎的な歯車生成�
 
 このライブラリーの作成にあたり、↓を参照しました。ISO/JIS規格の引用や解説をはじめかっこいい螺子をモデリングするためにたいへん役立ちました。ありがとうございます。
 
-1. URK 宇都宮螺子株式会社 よく分かる規格ねじ <https://www.urk.co.jp/contents/contents.html>
-2. KONOE 株式会社コノエ ねじの資料 <http://www.konoe.co.jp/reference/menu01.html>
-3. kikakuri.com B 0205-4 : 2001 (ISO 724 : 1993) <https://kikakurui.com/b0/B0205-4-2001-01.html>
-4. NBK ISO General Purpose Metric Screw Threads <https://www.nbk1560.com/~/media/PDF/en/technical/012_ISO%20General%20Purpose%20Metric%20Screw%20Threads.ashx>
-5. 締結.jp ねじの技術資料 1 ねじの基本（基準寸法） <http://teiketsu.jp/user_data/packages/default/hp_pdf/technology_01.pdf>
-6. MekatoroNet 一般用メートルねじ：基準寸法 <http://www.mekatoro.net/digianaecatalog/sugat-sougou/book/sugat-sougou-P1568.pdf>
-7. 池田金属工業株式会社 一般規格品一覧 <http://www.ikekin.co.jp/contents/catalog/standard/index.html>
-8. 島根大学　総合理工学部　機械・電気電子工学科　機械設計研究室 機械設計製図 （第六回目） <http://www.ecs.shimane-u.ac.jp/~shutingli/MDDNo6.pdf>
-9. サンワ・アイ 2014年 JIS規格移行問題 六角ナット どこが変わる？ <http://www.sanwa-i.co.jp/labo/report/j5.html>
-10. kikakuri.com B 1181：2014 <https://kikakurui.com/b1/B1181-2014-01.html>
-11. 日本ねじ商工連盟 六角ボルト・ナット 附属書品から本体規格品への切り替えガイド <http://www.fij.or.jp/jis-guide/>
-12. 岡總株式会社 ISO規格 ISO 8.8 ISO 10.9 強力六角ボルト <http://www.okaso.co.jp/docs/business/product/product_iso.php>
-13. GlobalFastener.com <http://www.globalfastener.com/>
-14. KEYCHATTER Unpacking The Kailh Box Switch Debacle <https://www.keychatter.com/2018/08/16/unpacking-the-kailh-box-switch-debacle/>
-15. Misuri 【面取り加工】代表的なc面取りなどの方法や種類をVA・VE事例を交えて紹介! <https://mitsu-ri.net/articles/chamfer-corner-cut>
+1. ネジ
+   1. URK 宇都宮螺子株式会社 よく分かる規格ねじ <https://www.urk.co.jp/contents/contents.html>
+   2. KONOE 株式会社コノエ ねじの資料 <http://www.konoe.co.jp/reference/menu01.html>
+   3. kikakuri.com B 0205-4 : 2001 (ISO 724 : 1993) <https://kikakurui.com/b0/B0205-4-2001-01.html>
+   4. NBK ISO General Purpose Metric Screw Threads <https://www.nbk1560.com/~/media/PDF/en/technical/012_ISO%20General%20Purpose%20Metric%20Screw%20Threads.ashx>
+   5. 締結.jp ねじの技術資料 1 ねじの基本（基準寸法） <http://teiketsu.jp/user_data/packages/default/hp_pdf/technology_01.pdf>
+   6. MekatoroNet 一般用メートルねじ：基準寸法 <http://www.mekatoro.net/digianaecatalog/sugat-sougou/book/sugat-sougou-P1568.pdf>
+   7. 池田金属工業株式会社 一般規格品一覧 <http://www.ikekin.co.jp/contents/catalog/standard/index.html>
+   8. 島根大学　総合理工学部　機械・電気電子工学科　機械設計研究室 機械設計製図 （第六回目） <http://www.ecs.shimane-u.ac.jp/~shutingli/MDDNo6.pdf>
+   9.  サンワ・アイ 2014年 JIS規格移行問題 六角ナット どこが変わる？ <http://www.sanwa-i.co.jp/labo/report/j5.html>
+   10. kikakuri.com B 1181：2014 <https://kikakurui.com/b1/B1181-2014-01.html>
+   11. 日本ねじ商工連盟 六角ボルト・ナット 附属書品から本体規格品への切り替えガイド <http://www.fij.or.jp/jis-guide/>
+   12. 岡總株式会社 ISO規格 ISO 8.8 ISO 10.9 強力六角ボルト <http://www.okaso.co.jp/docs/business/product/product_iso.php>
+   13. GlobalFastener.com <http://www.globalfastener.com/>
+   14. KEYCHATTER Unpacking The Kailh Box Switch Debacle <https://www.keychatter.com/2018/08/16/unpacking-the-kailh-box-switch-debacle/>
+2.  面取り
+    1. Misuri 【面取り加工】代表的なc面取りなどの方法や種類をVA・VE事例を交えて紹介! <https://mitsu-ri.net/articles/chamfer-corner-cut>
+3.  OpenSCAD & misc.
+    1. アニメーション
+       1. PRUSAPRINTERS BLOG How to animate models in OpenSCAD <https://blog.prusaprinters.org/how-to-animate-models-in-openscad/>
+       2. Hammad M Using ffmpeg to convert a set of images into a video <https://hamelot.io/visualization/using-ffmpeg-to-convert-a-set-of-images-into-a-video/>
 
 ### JIS 規格
 

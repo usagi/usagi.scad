@@ -17,3 +17,4 @@ include <part/shaft_support_block.scad>
 include <utility/number.scad>
 include <utility/text.scad>
 include <utility/vector.scad>
+include <utility/color.scad>

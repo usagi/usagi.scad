@@ -1,7 +1,7 @@
 // usagi.scad のえぐざんぷるです。
 // --------------------------------
 // ↓使いたい .scad から usagi.scad を読み込みましょう
-include <usagi.scad>
+include <../usagi.scad>
 // --------------------------------
 
 // このえぐざんぷるのちょっとした設定です。 OpenSCAD GUI 右側 Parameters で操作できて便利になります。
