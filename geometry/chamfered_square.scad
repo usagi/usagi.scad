@@ -12,6 +12,8 @@ include <../utility/vector/translate_vector.scad>
 ///       で個別に面取りパラメーターを設定したい場合に使用します。
 ///       chamfering_{angle|length|type}_{inner|outer}_{top|bottom} パラメーターは
 ///       4つの角それぞれで異なる面取りパラメーターを設定したい場合に使用します。
+/// @param chamfering_parameters, inner_chamfering_parameters, ... 系の引数は [ angle, length, type ] を1つの vector でまとめて設定したい場合に使用します
+///        個別に 3 つの引数を与えるのと同じ効果になります
 /// @param center 組み込み系で使える center と同等の中央寄せ機能に加え、 [ bool, bool ] で XY 各軸ごとにも center を有効/無効設定できます
 module chamfered_square
 ( size
@@ -19,6 +21,8 @@ module chamfered_square
 , chamfering_angle  = 0
 , chamfering_length = 0
 , chamfering_type   = "C"
+// [ angle, length, type ] で設定したい場合用
+, chamfering_parameters = [ ]
 // --- optional for detail level-1
 , inner_chamfering_angle = [ ]
 , outer_chamfering_angle = [ ]
@@ -29,6 +33,8 @@ module chamfered_square
 , inner_chamfering_type  = [ ]
 , outer_chamfering_type  = [ ]
 
+, inner_chamfering_parameters = [ ]
+, outer_chamfering_parameters = [ ]
 // --- optional for detail level-0 ( lowest )
 , inner_bottom_chamfering_angle = [ ]
 , inner_top_chamfering_angle    = [ ]
@@ -45,9 +51,40 @@ module chamfered_square
 , outer_bottom_chamfering_type  = [ ]
 , outer_top_chamfering_type     = [ ]
 
+, inner_bottom_chamfering_parameters = [ ]
+, inner_top_chamfering_parameters = [ ]
+, outer_bottom_chamfering_parameters = [ ]
+, outer_top_chamfering_parameters = [ ]
+
 , center = false
 )
 {
+  let
+  ( chamfering_angle  = chamfering_parameters != [ ] ? chamfering_parameters[ 0 ] : chamfering_angle
+  , chamfering_length = chamfering_parameters != [ ] ? chamfering_parameters[ 1 ] : chamfering_length
+  , chamfering_type   = chamfering_parameters != [ ] ? chamfering_parameters[ 2 ] : chamfering_type
+
+  , inner_chamfering_angle  = inner_chamfering_parameters != [ ] ? inner_chamfering_parameters[ 0 ] : inner_chamfering_angle
+  , inner_chamfering_length = inner_chamfering_parameters != [ ] ? inner_chamfering_parameters[ 1 ] : inner_chamfering_length
+  , inner_chamfering_type   = inner_chamfering_parameters != [ ] ? inner_chamfering_parameters[ 2 ] : inner_chamfering_type
+  , outer_chamfering_angle  = outer_chamfering_parameters != [ ] ? outer_chamfering_parameters[ 0 ] : outer_chamfering_angle
+  , outer_chamfering_length = outer_chamfering_parameters != [ ] ? outer_chamfering_parameters[ 1 ] : outer_chamfering_length
+  , outer_chamfering_type   = outer_chamfering_parameters != [ ] ? outer_chamfering_parameters[ 2 ] : outer_chamfering_type
+
+  , inner_top_chamfering_angle  = inner_top_chamfering_parameters != [ ] ? inner_top_chamfering_parameters[ 0 ] : inner_top_chamfering_angle
+  , inner_top_chamfering_length = inner_top_chamfering_parameters != [ ] ? inner_top_chamfering_parameters[ 1 ] : inner_top_chamfering_length
+  , inner_top_chamfering_type   = inner_top_chamfering_parameters != [ ] ? inner_top_chamfering_parameters[ 2 ] : inner_top_chamfering_type
+  , outer_top_chamfering_angle  = outer_top_chamfering_parameters != [ ] ? outer_top_chamfering_parameters[ 0 ] : outer_top_chamfering_angle
+  , outer_top_chamfering_length = outer_top_chamfering_parameters != [ ] ? outer_top_chamfering_parameters[ 1 ] : outer_top_chamfering_length
+  , outer_top_chamfering_type   = outer_top_chamfering_parameters != [ ] ? outer_top_chamfering_parameters[ 2 ] : outer_top_chamfering_type
+
+  , inner_bottom_chamfering_angle  = inner_bottom_chamfering_parameters != [ ] ? inner_bottom_chamfering_parameters[ 0 ] : inner_bottom_chamfering_angle
+  , inner_bottom_chamfering_length = inner_bottom_chamfering_parameters != [ ] ? inner_bottom_chamfering_parameters[ 1 ] : inner_bottom_chamfering_length
+  , inner_bottom_chamfering_type   = inner_bottom_chamfering_parameters != [ ] ? inner_bottom_chamfering_parameters[ 2 ] : inner_bottom_chamfering_type
+  , outer_bottom_chamfering_angle  = outer_bottom_chamfering_parameters != [ ] ? outer_bottom_chamfering_parameters[ 0 ] : outer_bottom_chamfering_angle
+  , outer_bottom_chamfering_length = outer_bottom_chamfering_parameters != [ ] ? outer_bottom_chamfering_parameters[ 1 ] : outer_bottom_chamfering_length
+  , outer_bottom_chamfering_type   = outer_bottom_chamfering_parameters != [ ] ? outer_bottom_chamfering_parameters[ 2 ] : outer_bottom_chamfering_type
+  )
   let
   ( center = 
     [ center == true || center[ 0 ]
