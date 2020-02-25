@@ -50,8 +50,11 @@ module pipe
 , inner_top_chamfering_type     = [ ]
 , outer_bottom_chamfering_type  = [ ]
 , outer_top_chamfering_type     = [ ]
+
+, center = false
 )
 {
+  translate( [ 0, 0, center ? -length / 2 : 0 ] )
   rotate_extrude()
   translate( [ inner_diameter / 2, 0, 0 ] )
     chamfered_square
@@ -60,33 +63,33 @@ module pipe
       ]
     
     // ここから面取りパラメーターの単純転送
-    , chamfering_angle 
-    , chamfering_length
-    , chamfering_type  
+    , chamfering_angle = chamfering_angle
+    , chamfering_length = chamfering_length
+    , chamfering_type = chamfering_type
 
-    , inner_chamfering_angle
-    , outer_chamfering_angle
+    , inner_chamfering_angle = inner_chamfering_angle
+    , outer_chamfering_angle = outer_chamfering_angle
 
-    , inner_chamfering_length
-    , outer_chamfering_length
+    , inner_chamfering_length = inner_chamfering_length
+    , outer_chamfering_length = outer_chamfering_length
 
-    , inner_chamfering_type
-    , outer_chamfering_type
+    , inner_chamfering_type = inner_chamfering_type
+    , outer_chamfering_type = outer_chamfering_type
 
-    , inner_bottom_chamfering_angle
-    , inner_top_chamfering_angle   
-    , outer_bottom_chamfering_angle
-    , outer_top_chamfering_angle   
+    , inner_bottom_chamfering_angle = inner_bottom_chamfering_angle
+    , inner_top_chamfering_angle =inner_top_chamfering_angle
+    , outer_bottom_chamfering_angle = outer_bottom_chamfering_angle
+    , outer_top_chamfering_angle = outer_top_chamfering_angle
 
-    , inner_bottom_chamfering_length
-    , inner_top_chamfering_length   
-    , outer_bottom_chamfering_length
-    , outer_top_chamfering_length   
+    , inner_bottom_chamfering_length = inner_bottom_chamfering_length
+    , inner_top_chamfering_length = inner_top_chamfering_length
+    , outer_bottom_chamfering_length = outer_bottom_chamfering_length
+    , outer_top_chamfering_length = outer_top_chamfering_length
 
-    , inner_bottom_chamfering_type
-    , inner_top_chamfering_type   
-    , outer_bottom_chamfering_type
-    , outer_top_chamfering_type   
+    , inner_bottom_chamfering_type= inner_bottom_chamfering_type
+    , inner_top_chamfering_type = inner_top_chamfering_type
+    , outer_bottom_chamfering_type = outer_bottom_chamfering_type
+    , outer_top_chamfering_type = outer_top_chamfering_type
     )
   ;
 }
