@@ -5,3 +5,6 @@ include <vector/reverse.scad>
 include <vector/shift_vector.scad>
 include <vector/slice_vector.scad>
 include <vector/translate_vector.scad>
+include <vector/concat_without_duplicate.scad>
+include <vector/keys.scad>
+include <vector/values.scad>
