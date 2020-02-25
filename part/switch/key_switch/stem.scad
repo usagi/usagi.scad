@@ -67,6 +67,9 @@ module key_switch_stem( data )
       , "stem_cross_y_notch_z_position"
       , "stem_cross_y_notch_chamfering_angle"
       , "stem_cross_y_notch_height"
+
+      , "stem_cross_x_bar_inset_size"
+      , "stem_cross_x_bar_inset_top_chamfering_parameters"
     ]
     , data == [ ] ? switch_reference_data_MX : data
     );
@@ -130,6 +133,9 @@ module key_switch_stem( data )
   stem_cross_y_notch_chamfering_angle = data[ indices[ 52 ] ][ 1 ];
   stem_cross_y_notch_height           = data[ indices[ 53 ] ][ 1 ];
 
+  stem_cross_x_bar_inset_size                       = data[ indices[ 54 ] ][ 1 ];
+  stem_cross_x_bar_inset_top_chamfering_parameters  = data[ indices[ 55 ] ][ 1 ];
+
   // 原点で作成した後でハウジングに収まる位置へ移動するための移動量
   translation = 
     [ housing_bottom_outer_size[ 0 ] / 2
@@ -137,29 +143,52 @@ module key_switch_stem( data )
     , housing_height
     ];
 
+  module _cross_x_inset()
+  {
+    rotate( [ 90, 0, 0 ] )
+    linear_extrude( stem_cross_x_bar_inset_size[ 1 ], center = true )
+    chamfered_square
+    ( [ stem_cross_x_bar_inset_size[ 0 ], stem_cross_x_bar_inset_size[ 2 ] ]
+    , center = [ true, false ]
+    , inner_top_chamfering_parameters = stem_cross_x_bar_inset_top_chamfering_parameters
+    , outer_top_chamfering_parameters = stem_cross_x_bar_inset_top_chamfering_parameters
+    );
+  }
+  
   module _cross()
   {
     difference()
     {
       union()
       {
-        chamfered_cube
-        ( size = [ cxxy[ 0 ], cxxy[ 1 ], cz ]
-        , center = [ true, true, false ]
-        , top_chamfering_parameters         = stem_cross_x_bar_top_chamfering_parameters
-        , right_chamfering_parameters       = stem_cross_x_bar_right_chamfering_parameters
-        , left_chamfering_parameters        = stem_cross_x_bar_left_chamfering_parameters
-        , front_chamfering_parameters       = stem_cross_x_bar_front_chamfering_parameters
-        , back_chamfering_parameters        = stem_cross_x_bar_back_chamfering_parameters
-        , top_front_chamfering_parameters   = stem_cross_x_bar_top_front_chamfering_parameters
-        , top_back_chamfering_parameters    = stem_cross_x_bar_top_back_chamfering_parameters
-        , top_right_chamfering_parameters   = stem_cross_x_bar_top_right_chamfering_parameters
-        , top_left_chamfering_parameters    = stem_cross_x_bar_top_left_chamfering_parameters
-        , front_right_chamfering_parameters = stem_cross_x_bar_front_right_chamfering_parameters
-        , front_left_chamfering_parameters  = stem_cross_x_bar_front_left_chamfering_parameters
-        , back_right_chamfering_parameters  = stem_cross_x_bar_back_right_chamfering_parameters
-        , back_left_chamfering_parameters   = stem_cross_x_bar_back_left_chamfering_parameters
-        );
+        difference()
+        {
+          chamfered_cube
+          ( size = [ cxxy[ 0 ], cxxy[ 1 ], cz ]
+          , center = [ true, true, false ]
+          , top_chamfering_parameters         = stem_cross_x_bar_top_chamfering_parameters
+          , right_chamfering_parameters       = stem_cross_x_bar_right_chamfering_parameters
+          , left_chamfering_parameters        = stem_cross_x_bar_left_chamfering_parameters
+          , front_chamfering_parameters       = stem_cross_x_bar_front_chamfering_parameters
+          , back_chamfering_parameters        = stem_cross_x_bar_back_chamfering_parameters
+          , top_front_chamfering_parameters   = stem_cross_x_bar_top_front_chamfering_parameters
+          , top_back_chamfering_parameters    = stem_cross_x_bar_top_back_chamfering_parameters
+          , top_right_chamfering_parameters   = stem_cross_x_bar_top_right_chamfering_parameters
+          , top_left_chamfering_parameters    = stem_cross_x_bar_top_left_chamfering_parameters
+          , front_right_chamfering_parameters = stem_cross_x_bar_front_right_chamfering_parameters
+          , front_left_chamfering_parameters  = stem_cross_x_bar_front_left_chamfering_parameters
+          , back_right_chamfering_parameters  = stem_cross_x_bar_back_right_chamfering_parameters
+          , back_left_chamfering_parameters   = stem_cross_x_bar_back_left_chamfering_parameters
+          );
+
+          if ( stem_cross_x_bar_inset_size[ 1 ] > 0 )
+          {
+            translate( [ 0, -cxxy[ 1 ] / 2, 0 ] )
+              _cross_x_inset();
+            translate( [ 0, +cxxy[ 1 ] / 2, 0 ] )
+              _cross_x_inset();
+          }
+        }
         chamfered_cube
         ( size = [ cyxy[ 0 ], cyxy[ 1 ], cz ]
         , center = [ true, true, false ]
@@ -178,6 +207,7 @@ module key_switch_stem( data )
         , back_left_chamfering_parameters   = stem_cross_y_bar_back_left_chamfering_parameters
         );
       }
+
       if ( stem_cross_y_notch_depth != 0 )
       {
         translate( [ 0, cyxy[ 1 ] / 2 * ( stem_cross_y_notch_depth > 0 ? -1 : +1 ), stem_cross_y_notch_z_position ] )

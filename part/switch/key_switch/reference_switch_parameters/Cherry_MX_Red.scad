@@ -8,14 +8,17 @@ reference_switch_parameters_Cherry_MX_Red =
       , [ "stem_cross_x_bar", [ 4.00, 1.31 ] ]
       , [ "stem_cross_y_bar", [ 1.09, 4.00 ] ]
       , [ "stem_cross_z", 3.60 ]
-      , [ "stem_cross_x_bar_top_chamfering_parameters"      , [ 30, 0.2, "C" ] ]
+      , [ "stem_cross_x_bar_top_left_chamfering_parameters" , [  0, 0.1, "R" ] ]
+      , [ "stem_cross_x_bar_top_right_chamfering_parameters", [  0, 0.1, "R" ] ]
       , [ "stem_cross_y_bar_top_chamfering_parameters"      , [ 30, 0.2, "C" ] ]
       , [ "stem_cross_y_bar_top_front_chamfering_parameters", [ 45, 0.4, "C" ] ]
       , [ "stem_cross_y_bar_top_back_chamfering_parameters" , [ 30, 0.4, "C" ] ]
+      , [ "stem_cross_x_bar_inset_size", [ 3.60, 0.145, 3.40 ] ] // [ x width, y depth, z height ]
+      , [ "stem_cross_x_bar_inset_top_chamfering_parameters", [ 0, 0.05, "R" ] ]
       
       // Cherry MX や Kailh のクロス部を横から見ると y_bar の +/- 何れかにある切り欠けの設定
       // 厳密にはキャップとの摩擦に影響するが、大量に射出成形するわけでなければ無くてもよいかもしれません
-      , [ "stem_cross_y_notch_depth", 0.20 ]
+      , [ "stem_cross_y_notch_depth", -0.20 ]
       , [ "stem_cross_y_notch_z_position", 2.60 ]
       , [ "stem_cross_y_notch_chamfering_angle", 45 ]
       , [ "stem_cross_y_notch_height", 1.50 ]
