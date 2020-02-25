@@ -63,9 +63,9 @@ module chamfered_cube
 {
   let
   ( center = 
-    [ center == true || ( len( center ) == 3 && center[ 0 ] )
-    , center == true || ( len( center ) == 3 && center[ 1 ] )
-    , center == true || ( len( center ) == 3 && center[ 2 ] )
+    [ center == true || center[ 0 ]
+    , center == true || center[ 1 ]
+    , center == true || center[ 2 ]
     ]
   )
   translate
