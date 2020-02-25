@@ -56,8 +56,11 @@ module chamfered_cube
 , front_left_chamfering_parameters   = [ ] // 前面(-Y向き面)側の左面(-X向き)側の面取り設定
 , back_right_chamfering_parameters   = [ ] // 背面(+Y向き面)側の右面(+X向き)側の面取り設定
 , back_left_chamfering_parameters    = [ ] // 背面(+Y向き面)側の左面(-X向き)側の面取り設定
+
+, center = false
 )
 {
+  translate( center ? -size / 2 : [ 0, 0, 0 ] )
   // default, level-2
   let
   ( chamfering_parameters = chamfering_parameters == [ ] ? [ chamfering_angle, chamfering_length, chamfering_type ] : chamfering_parameters

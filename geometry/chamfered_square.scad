@@ -43,8 +43,11 @@ module chamfered_square
 , inner_top_chamfering_type     = [ ]
 , outer_bottom_chamfering_type  = [ ]
 , outer_top_chamfering_type     = [ ]
+
+, center = false
 )
 {
+  translate( center ? -size / 2 : [ 0, 0 ] )
   let
   ( size = len( size ) == 2 ? size : [ size, size ]
   // to LOD-1 via LOD-2
