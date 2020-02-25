@@ -12,6 +12,7 @@ include <../utility/vector/translate_vector.scad>
 ///       で個別に面取りパラメーターを設定したい場合に使用します。
 ///       chamfering_{angle|length|type}_{inner|outer}_{top|bottom} パラメーターは
 ///       4つの角それぞれで異なる面取りパラメーターを設定したい場合に使用します。
+/// @param center 組み込み系で使える center と同等の中央寄せ機能に加え、 [ bool, bool ] で XY 各軸ごとにも center を有効/無効設定できます
 module chamfered_square
 ( size
 // --- optional detail level-2 ( highest )
@@ -47,7 +48,17 @@ module chamfered_square
 , center = false
 )
 {
-  translate( center ? -size / 2 : [ 0, 0 ] )
+  let
+  ( center = 
+    [ center == true || ( len( center ) == 3 && center[ 0 ] )
+    , center == true || ( len( center ) == 3 && center[ 1 ] )
+    ]
+  )
+  translate
+  ( [ center[ 0 ] ? -size[ 0 ] / 2 : 0
+    , center[ 1 ] ? -size[ 1 ] / 2 : 0
+    ]
+  )
   let
   ( size = len( size ) == 2 ? size : [ size, size ]
   // to LOD-1 via LOD-2

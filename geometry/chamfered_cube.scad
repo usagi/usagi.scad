@@ -26,6 +26,7 @@ include <chamfered_square.scad>
 ///               sub case A: top_ と right_ に同じ面取り設定を与えた場合   --> どちらが優先されても結果は同じなので安全に有効
 ///               sub case B: top_ と right_ に異なる面取り設定を与えた場合 --> どちらが採用されるか仕様として未定義なので動作は実装依存で不定
 ///       例 3/sub case B の場合は追加で top_right_ 引数を明示的に与える事で確実に意図した面取り設定を安全に有効化できます
+/// @param center 組み込み系で使える center と同等の中央寄せ機能に加え、 [ bool, bool, bool ] で XYZ 各軸ごとにも center を有効/無効設定できます
 module chamfered_cube
 ( size
 // --- optional detail level-2 / indivual ---
@@ -60,7 +61,19 @@ module chamfered_cube
 , center = false
 )
 {
-  translate( center ? -size / 2 : [ 0, 0, 0 ] )
+  let
+  ( center = 
+    [ center == true || ( len( center ) == 3 && center[ 0 ] )
+    , center == true || ( len( center ) == 3 && center[ 1 ] )
+    , center == true || ( len( center ) == 3 && center[ 2 ] )
+    ]
+  )
+  translate
+  ( [ center[ 0 ] ? -size[ 0 ] / 2 : 0
+    , center[ 1 ] ? -size[ 1 ] / 2 : 0
+    , center[ 2 ] ? -size[ 2 ] / 2 : 0
+    ]
+  )
   // default, level-2
   let
   ( chamfering_parameters = chamfering_parameters == [ ] ? [ chamfering_angle, chamfering_length, chamfering_type ] : chamfering_parameters
