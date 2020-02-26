@@ -76,6 +76,8 @@ module key_switch_stem( data )
       , "stem_craw_electric_contact_clearance"
 
       , "stem_rail_chamfering_parameters"
+
+      , "stem_skirt_side_shrinking"
     ]
     , data == [ ] ? reference_switch_parameters : data
     );
@@ -147,6 +149,8 @@ module key_switch_stem( data )
   stem_craw_electric_contact_clearance = data[ indices[ 57 ] ][ 1 ];
 
   stem_rail_chamfering_parameters = data[ indices[ 58 ] ][ 1 ];
+
+  stem_skirt_side_shrinking = data[ indices[ 59 ] ][ 1 ];
 
   // 原点で作成した後でハウジングに収まる位置へ移動するための移動量
   translation = 
@@ -256,15 +260,16 @@ module key_switch_stem( data )
   {
     union()
     {
+      // 太い方
       translate( [ 0, -stem_rail_width[ 0 ] / 2, -stem_skirt_height[ 0 ] ] )
       chamfered_cube
       ( [ stem_rail_thickness, stem_rail_width[ 0 ], stem_rail_height[ 0 ] ]
       , chamfering_parameters = stem_rail_chamfering_parameters
-      , bottom_chamfering_parameters = [ 0, 0, "C" ]
       );
-      translate( [ 0, -stem_rail_width[ 1 ] / 2, -stem_skirt_height[ 0 ] ] )
+      // 細い方
+      translate( [ 0, -stem_rail_width[ 1 ] / 2, -stem_skirt_height[ 0 ] + stem_rail_height[ 0 ] - stem_rail_chamfering_parameters[ 1 ] ] )
       chamfered_cube
-      ( [ stem_rail_thickness, stem_rail_width[ 1 ], stem_rail_height[ 1 ] ]
+      ( [ stem_rail_thickness, stem_rail_width[ 1 ], stem_rail_height[ 1 ] - stem_rail_height[ 0 ] + stem_rail_chamfering_parameters[ 1 ] ]
       , chamfering_parameters = stem_rail_chamfering_parameters
       , bottom_chamfering_parameters = [ 0, 0, "C" ]
       );
@@ -275,10 +280,10 @@ module key_switch_stem( data )
   {
     // rail/right
     translate( [ stem_stage_size[ 0 ] / 2 - stem_skirt_thickness[ 0 ], 0, 0 ] )
-      _rail();
+    _rail();
     // rail/left
     translate( [ -( stem_stage_size[ 0 ] / 2 - stem_skirt_thickness[ 0 ] ) - stem_rail_thickness, 0, 0 ] )
-      _rail();
+    _rail();
   }
 
   module _side_skirt( avoid_electric_contact = true )
@@ -303,24 +308,22 @@ module key_switch_stem( data )
       ;
     r3 = [ stem_skirt_height[ 0 ], -stem_stage_size[ 1 ] + stem_stage_side_chamfering_parameters[ 1 ] ];
     r4 = [ stem_craw_extruding_map[ 0 ][ 0 ], -stem_stage_size[ 1 ] + stem_stage_side_chamfering_parameters[ 1 ] ];
-    difference()
-    {
-      translate( [ 0, -stem_stage_size[ 1 ] / 2, 0 ] )
-      rotate( [ 0, 90, 0 ] )
-      rotate( [ 180, 0, 0 ] )
-      linear_extrude( stem_skirt_thickness[ 0 ], center = true )
-      polygon
-      ( [ [ stem_craw_extruding_map[ 0 ][ 0 ], 0 ]
-        , for ( p = stem_craw_extruding_map )
-            p
-        , r1 // 先端後方
-        , for ( q = r2v )
-            q
-        , r3 // 後下
-        , r4 // 後上
-        ]
-      );
-    }
+      
+    translate( [ 0, -stem_stage_size[ 1 ] / 2, 0 ] )
+    rotate( [ 0, 90, 0 ] )
+    rotate( [ 180, 0, 0 ] )
+    linear_extrude( stem_skirt_thickness[ 0 ], center = true )
+    polygon
+    ( [ [ stem_craw_extruding_map[ 0 ][ 0 ], 0 ]
+      , for ( p = stem_craw_extruding_map )
+          p
+      , r1 // 先端後方
+      , for ( q = r2v )
+          q
+      , r3 // 後下
+      , r4 // 後上
+      ]
+    );
   }
 
   module _stage()
@@ -343,23 +346,67 @@ module key_switch_stem( data )
 
   module _skirt()
   {
-    // back
-    translate( [ stem_skirt_notch_length / 2, stem_stage_size[ 1 ] / 2 - stem_skirt_thickness[ 1 ], -stem_skirt_height[ 1 ] ] )
-    chamfered_cube
-    ( [ ( stem_stage_size[ 0 ] - stem_skirt_notch_length ) / 2 , stem_skirt_thickness[ 1 ], stem_skirt_height[ 1 ]  - stem_stage_top_chamfering_parameters[ 1 ] ]
-    , back_right_chamfering_parameters = stem_stage_side_chamfering_parameters
-    );
-    translate( [ -( stem_skirt_notch_length / 2 ) - ( stem_stage_size[ 0 ] - stem_skirt_notch_length ) / 2, stem_stage_size[ 1 ] / 2 - stem_skirt_thickness[ 1 ], -stem_skirt_height[ 1 ] ] )
-    chamfered_cube
-    ( [ ( stem_stage_size[ 0 ] - stem_skirt_notch_length ) / 2 , stem_skirt_thickness[ 1 ], stem_skirt_height[ 1 ]  - stem_stage_top_chamfering_parameters[ 1 ] ]
-    , back_left_chamfering_parameters = stem_stage_side_chamfering_parameters
-    );
+    intersection()
+    {
+      union()
+      {
+        // back
+        translate( [ stem_skirt_notch_length / 2, stem_stage_size[ 1 ] / 2 - stem_skirt_thickness[ 1 ], -stem_skirt_height[ 1 ] ] )
+        chamfered_cube
+        ( [ ( stem_stage_size[ 0 ] - stem_skirt_notch_length ) / 2 , stem_skirt_thickness[ 1 ], stem_skirt_height[ 1 ]  - stem_stage_top_chamfering_parameters[ 1 ] ]
+        , back_right_chamfering_parameters = stem_stage_side_chamfering_parameters
+        );
+        translate( [ -( stem_skirt_notch_length / 2 ) - ( stem_stage_size[ 0 ] - stem_skirt_notch_length ) / 2, stem_stage_size[ 1 ] / 2 - stem_skirt_thickness[ 1 ], -stem_skirt_height[ 1 ] ] )
+        chamfered_cube
+        ( [ ( stem_stage_size[ 0 ] - stem_skirt_notch_length ) / 2 , stem_skirt_thickness[ 1 ], stem_skirt_height[ 1 ]  - stem_stage_top_chamfering_parameters[ 1 ] ]
+        , back_left_chamfering_parameters = stem_stage_side_chamfering_parameters
+        );
 
-    // side
-    translate( [ +stem_stage_size[ 0 ] / 2 - stem_skirt_thickness[ 0 ] / 2, 0, 0 ] )
-    _side_skirt();
-    translate( [ -stem_stage_size[ 0 ] / 2 + stem_skirt_thickness[ 0 ] / 2, 0, 0 ] )
-    _side_skirt( false );
+        // side
+        translate( [ +stem_stage_size[ 0 ] / 2 - stem_skirt_thickness[ 0 ] / 2, 0, 0 ] )
+        _side_skirt();
+        translate( [ -stem_stage_size[ 0 ] / 2 + stem_skirt_thickness[ 0 ] / 2, 0, 0 ] )
+        _side_skirt( false );
+      }
+
+      if ( stem_skirt_side_shrinking )
+        union()
+        {
+          front_margin = 2;
+          diff_tickness = stem_skirt_thickness[ 0 ] - stem_skirt_thickness[ 2 ];
+          diff_height = stem_bottom_shaft_height - stem_skirt_height[ 2 ];
+          translate( [ -stem_stage_size[ 0 ] / 2 + diff_tickness, -stem_stage_size[ 1 ] / 2 - front_margin, -stem_bottom_shaft_height ] )
+          cube
+          ( [ stem_stage_size[ 0 ] - diff_tickness * 2
+            , stem_stage_size[ 1 ] + front_margin
+            , diff_height
+            ]
+          );
+          translate( [ -stem_stage_size[ 0 ] / 2, -stem_stage_size[ 1 ] / 2 - front_margin, -stem_bottom_shaft_height + diff_height ] )
+          cube
+          ( [ stem_stage_size[ 0 ]
+            , stem_stage_size[ 1 ] + front_margin
+            , stem_bottom_shaft_height - diff_height
+            ]
+          );
+        }
+    }
+
+    /*
+    // 下部の削り
+    bottom_outer_chipper_size = 
+      [ ( stem_skirt_thickness[ 0 ] - stem_skirt_thickness[ 2 ] ) * 2
+      , stem_stage_size[ 1 ] * 2
+      , stem_skirt_height[ 0 ] - stem_skirt_height[ 2 ] + stem_bottom_shaft_height
+      ];
+    
+    // left
+    translate( [ +stem_stage_size[ 0 ] / 2, 0, -stem_skirt_height[ 0 ] - stem_bottom_shaft_height + bottom_outer_chipper_size[ 2 ] / 2 ] )
+    cube( size = bottom_outer_chipper_size, center = true );
+    // right
+    translate( [ -stem_stage_size[ 0 ] / 2, 0, -stem_skirt_height[ 0 ] - stem_bottom_shaft_height + bottom_outer_chipper_size[ 2 ] / 2 ] )
+    cube( size = bottom_outer_chipper_size, center = true );
+    */
   }
   
   module _shaft()
@@ -381,10 +428,10 @@ module key_switch_stem( data )
     union()
     {
       _cross();
+      _shaft();
       _stage();
       _skirt();
       _rails();
-      _shaft();
     }
   }
 

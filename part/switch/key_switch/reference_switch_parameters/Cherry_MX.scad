@@ -58,4 +58,6 @@ reference_switch_parameters_Cherry_MX =
 
   , [ "housing_bottom_stem_hole_diameter", 2.00 ] // [mm] stem_bottom_shaft が挿さる穴
   
+  , [ "stem_skirt_side_shrinking", true ] // true: スカート下部のX軸方向の幅の削りを有効にします(レンダーでの形状の再現性を優先), false: 無効にします(プレビューでのツメの凹構造の描画欠けの抑止を優先)
+
   ];
