@@ -158,7 +158,7 @@ module chamfered_square
       inner_top_chamfering_type == "R"
         ? translate_vector
           ( [ inner_top_chamfering_length, size[ 1 ] - inner_top_chamfering_length ]
-          , generate_arc_vertices( outer_top_chamfering_length, 180, 270 )
+          , generate_arc_vertices( inner_top_chamfering_length, 180, 270 )
           )
         : inner_top_chamfering_type == "C"
             ? [ [ 0                            , size[ 1 ] - inner_top_chamfering_length ]
