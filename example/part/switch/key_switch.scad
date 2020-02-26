@@ -13,6 +13,7 @@ key_switch_stem( make_switch_parameters( "Cherry MX Red" ) );
 
 // Cherry MX Brown を造形
 translate( [ 12, 0, -4 * cos( $t * 360 + 120 ) ] )
+rotate( [ 0, 0, $t * 360 ] )
 key_switch_stem( make_switch_parameters( "Cherry MX Brown" ) );
 
 //*
@@ -38,5 +39,6 @@ my_switch_parameters = make_switch_parameters
 
 // (つづいて)カスタムしたパラメーターで造形
 translate( [ 24, 0, -4 * cos( $t * 360 + 150 ) ] )
+rotate( [ $t * 360, 0, 0 ] )
 key_switch_stem( my_switch_parameters );
 //*/
