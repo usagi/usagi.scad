@@ -1,5 +1,5 @@
 include <reference_switch_parameters.scad>
-include <../../../utility/vector/concat_without_duplicate.scad>
+include <../../../utility/vector/concat_without_duplication.scad>
 
 function make_switch_parameters
 ( base_name = "Cherry MX Red"
@@ -16,5 +16,5 @@ function make_switch_parameters
                 : [ ]
           )
   )
-    concat_without_duplicate( base_parameters, custom_parameters )
+    concat_without_duplication( base_parameters, custom_parameters )
   ;

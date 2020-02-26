@@ -2,7 +2,7 @@
 /// @note 組み込み版の concat の key による重複なし結合版です
 ///       key-value 型のデータ a に対して一部の key-value の更新または新規 key-value の追加を
 ///       行いたい場合に使用します
-function concat_without_duplicate( a, b ) =
+function concat_without_duplication( a, b ) =
   [ // step-1: a の keys を b から探して b の値で a の値を更新または a の値をそのまま採用
      for ( a_pair = a )
       let
