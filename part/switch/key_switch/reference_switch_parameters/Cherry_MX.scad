@@ -42,11 +42,15 @@ reference_switch_parameters_Cherry_MX =
   , [ "stem_skirt_height", [ 6.40, 5.75, 5.00 ] ] // [mm] ステージ上面からステム下部へ続くスカート構造の最下部までの長さ (端子に直接触れる出っ張り部分は除く) [ 側面部, 背面部, 側面部の厚みが僅かに変化するまでの高さ ]
   , [ "stem_skirt_thickness", [ 0.75, 0.80, 0.65 ] ] // [mm] ステージ上面からステム下部へ続くスカート構造の厚さ [ 側面部のX軸方向の厚さ, 背面部のY軸方向の厚さ, 側面下端部の厚さ(外側が僅かに薄くなる) ]
   , [ "stem_skirt_notch_length", 2.48 ] // [mm] ステージ上面からステム下部へ続くスカート構造の背面側の切り欠き部の長さ(X軸方向)
+  , [ "stem_skirt_bottom_specialization_left", [ ] ]  // Speed Silver などスカート底部の形状が単純な直線形ではない場合にその頂点群を特殊化できます。
+                                                      // 座標系は stem_craw_extruding_map と同じです。( [ ステージ部からの深さ(-Z), ステージ前面からの押し出し量(-Y;スカート底部はほぼ負の値になります) ] )
+                                                      //  (赤軸や茶軸ではスカート底部は単純な直線形のため空リストにしておけば自動生成で再現します)
+  , [ "stem_skirt_bottom_specialization_right", [ ] ] // note: 多くの場合、電極のクリアランスが必要なため left には不要な切り欠けを設ける必要があります
 
   //, [ "stem_craw_extruding_map" [] ]
   //, [ "stem_craw_electric_contact_avoider", [] ]
-  , [ "stem_craw_tip_width", 0.40 ] // [mm] 爪の先端のY軸幅
-  , [ "stem_craw_electric_contact_clearance", [ 5.5, 0.8 ] ] // [ ステージからの深さ(-Z) [mm], Y軸方向の幅 [mm] ]
+  , [ "stem_craw_tip_width", 0.60 ] // [mm] 爪の先端のY軸幅
+  , [ "stem_craw_electric_contact_clearance", [ 5.5, 0.2, 0.6 ] ] // [ ステージからの深さ(-Z) [mm], Y軸方向の 0 より外側方向への幅 [mm], Y軸方向の 0 より内側方向への幅 [mm], ]
 
   , [ "stem_rail_width", [ 2.2, 1.4 ] ] // [mm] ステム側面のハウジングレールとの噛み合わせ構造部の幅(Y軸方向長さ) [ 下部, 上部 ]
   , [ "stem_rail_thickness", 1.50 ] // [mm] ステム側面のハウジングレールとの噛み合わせ構造部の幅(X軸方向長さ)
