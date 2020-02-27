@@ -1,4 +1,5 @@
-include <Cherry_MX.scad>
+include <Cherry_MX_Red.scad>
+include <../../../../utility/vector/concat_without_duplication.scad>
 
 reference_switch_parameters_Cherry_MX_Speed_Silver = 
   [ [ "Cherry MX Speed Silver"

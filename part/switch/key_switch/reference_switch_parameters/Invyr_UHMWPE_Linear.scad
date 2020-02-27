@@ -1,4 +1,4 @@
-include <Cherry_MX.scad>
+include <Cherry_MX_Red.scad>
 include <../../../../utility/vector/concat_without_duplication.scad>
 
 /// @note UHMWPE:=Ultra High Molecular Weight Polyethylene 超高分子量ポリエチレン は材料名がそのまま製品名にもついているぱたーんです。
