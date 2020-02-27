@@ -6,7 +6,7 @@ reference_switch_parameters_Cherry_MX_Speed_Silver =
     , concat_without_duplication
       ( reference_switch_parameters_Cherry_MX_Red[ 0 ][ 1 ]
       , [ [ "stem_craw_extruding_map"
-          , [ [ 3.20, 0.00 ]
+          , [ [ 3.20, 0.10 ]
             , [ 6.90, 1.00 ]
             ]
           ]
