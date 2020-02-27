@@ -300,16 +300,17 @@ module key_switch_stem( data )
     dr = dry / drz;
     r1 = r0 - [ 0.00, stem_craw_tip_width ];
     r2z = stem_craw_electric_contact_clearance[ 0 ];
-    r2y1 = r1[ 1 ] - dr * ( r1[ 0 ] - r2z );
+    r2y1r = r1[ 1 ] - dr * ( r1[ 0 ] - r2z );
+    r2y1l = r1[ 1 ] - dr * ( r1[ 0 ] - stem_skirt_height[ 0 ] );
     r2y2 = -stem_craw_electric_contact_clearance[ 2 ] - dry / tan( 60 );
     r2v = 
       concat
       ( avoid_electric_contact
-          ? [ [ r2z, max( r2y1, +stem_craw_electric_contact_clearance[ 1 ] ) ]
+          ? [ [ r2z, max( r2y1r, +stem_craw_electric_contact_clearance[ 1 ] ) ]
             , [ stem_craw_electric_contact_clearance[ 0 ], -stem_craw_electric_contact_clearance[ 2 ] ]
             , [ stem_skirt_height[ 0 ], r2y2 ]
             ]
-          : [ [ stem_skirt_height[ 0 ], 0.40 ] ]
+          : [ [ stem_skirt_height[ 0 ], r2y1l ] ]
       , [ [ stem_skirt_height[ 0 ], -stem_stage_size[ 1 ] + stem_stage_side_chamfering_parameters[ 1 ] ] ]
       );
     // back-bottom
@@ -319,7 +320,7 @@ module key_switch_stem( data )
     // back-top
     r5 = [ stem_stage_size[ 2 ], r4[ 1 ] ];
     // front-top
-    r6 = [ r5[ 0 ], 0 ];
+    r6 = [ stem_craw_extruding_map[ 0 ][ 0 ], -stem_stage_side_chamfering_parameters[ 1 ] ];
     
     front_vertices  = concat( [ [ stem_craw_extruding_map[ 0 ][ 0 ], 0 ] ], stem_craw_extruding_map );
     bottom_vertices = 
