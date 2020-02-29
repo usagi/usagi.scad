@@ -5,10 +5,6 @@ include <../../../../part/switch/key_switch/make_switch_parameters.scad>
 $fs = 0.1;
 $fa = 5;
 
-// この example と key_switch 系モジュールは実装途中です。
-// 現在はステムの造形にのみ対応しています。
-// https://github.com/usagi/usagi.scad/issues/1
-
 // Cherry MX Red を造形
 translate( [ 0, 0, -4 * cos( $t * 360 + 90 ) ] )
 key_switch_stem( make_switch_parameters( "Cherry MX Red" ) );
