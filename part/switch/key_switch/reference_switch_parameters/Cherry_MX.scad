@@ -35,7 +35,7 @@ reference_switch_parameters_Cherry_MX =
   , [ "stem_stage_hole_height"  , 2.5 ] // [mm] ステムを裏から見ると空いている円柱穴の深さ
 
   , [ "stem_bottom_shaft_diameter"          ,  1.97 ] // [mm] ステム下部シャフトの直径
-  , [ "stem_bottom_shaft_height"            ,  9.00 ] // [mm] ステム下部シャフト最下端からステージ上面までの長さ
+  , [ "stem_bottom_shaft_height"            ,  [ 9.00, 0.00 ] ] // [mm] ステム下部シャフト最下端からステージ上面までの長さ [ 面取りの到達点(通常の最下部), 面取りの到達点からさらに延長されるシャフトの長さ(青軸などで使用) ]
   , [ "stem_bottom_shaft_chamfering_angle"  , 30.00 ] // [deg] ステム下部シャフトのC面取り角度
   , [ "stem_bottom_shaft_chamfering_length" ,  0.866025 ] // [mm] ステム下部シャフトのC面取り深さ (周辺の長さの計測と角度の目視推定から 0.5 / tan( 30 ) = 0.866025 と推定した )
 
@@ -57,11 +57,21 @@ reference_switch_parameters_Cherry_MX =
   , [ "stem_rail_height", [ 4.35, 5.2 ] ] // [mm] ステム側面のハウジングレールとの噛み合わせ構造部の高さ [ 側面部, 中央部 ]
   , [ "stem_rail_chamfering_parameters", [ 0, 0.2, "R" ] ]
 
-  //, [ "stem_skirt_splitted", false ] // true: ステムのスカート部分がステム本体から分離されるよう造形します(いわゆるクリッキー＆音の大きな青軸っぽくする), false: 分離しない一体化した造形にします
-  //, [ "stem_skirt_color", [ ] ] // ステムのスカート部分の色をRGB値または空で設定。空にした場合は stem_color が自動的に採用されます
+  , [ "stem_skirt_splitter", [ ] ] // Cherry MX Blue のようにスカートを分離する構造の場合は [ 分離開始するステージからの深さ mm, 分離終了するステージからの深さ mm ], 分離しない場合は空値 [ ] を設定
+
+  // とりあえず青軸の設定値を基準値として持っておく事にしました
+  , [ "stem_skirt_splitted_holes", [ [ 5.66, 0.05, 0.00 ], [ 5.56, 3.00, 0.00 ], [ 6.45, 3.15, 0.35 ], [ 7.60, 1.65, 0.35 ] ] ] // [mm] スカート分離する場合にスカート側に開ける穴のサイズ群 [ X幅, Y幅, 上部に残すZ幅 ]
+  , [ "stem_skirt_splitted_craw_width", [ 2.90, 2.30, 1.40 ] ] // [mm] スカート分離する場合にスカート側に開ける穴に通す支柱の幅(Y軸方向) [ 根本の太い部分, 途中から細くなる部分, 爪の先端のスカート内のレールに引っ掛ける部分 ]
+  , [ "stem_skirt_splitted_craw_thickness", 0.75 ] // [mm] 支柱の爪の厚さ(X軸方向)
+  , [ "stem_skirt_splitted_craw_arm_positions", [ 2.3, 2.25, 3.1, 3.5 ] ] // [mm] 支柱の重要な位置パラメーター群 [ 付け根の内側よりのX位置(+/-), 折れ曲がるZ深さ(下端), 折れ曲がった先の先端X位置(先端にさらに付いている極小の突起部分を除く) ]
+  , [ "splitted_part_enabling", [ true, true ] ] // stem_skirt_splitter が [ ] でない場合に分離された部品の造形部位を選択的に有効化/無効化できます [ 本体の造形 true/false, 分離スカートの造形 ]
+                                                 // 3Dプリンターで分離して造形したい場合などに使用します
+  , [ "stem_skirt_color", [ ] ] // ステムのスカート部分の色をRGB値または空で設定。空にした場合は stem_color が自動的に採用されます
 
   , [ "housing_bottom_stem_hole_diameter", 2.00 ] // [mm] stem_bottom_shaft が挿さる穴
   
   , [ "stem_skirt_side_shrinking", true ] // true: スカート下部のX軸方向の幅の削りを有効にします(レンダーでの形状の再現性を優先), false: 無効にします(プレビューでのツメの凹構造の描画欠けの抑止を優先)
 
-  ];
+  , [ "stage_additional_antena", [ ] ] // 青軸についてるステージ右側のアンテナっぽい部品を再現したい場合に値を入れます [ 直径 mm, 高さ mm, 切り落とし角度 deg ]
+  , [ "stage_additional_corner_craw", [ ] ] // 青軸についてるステージ側面前後の四隅付近の謎の凸を再現したい場合に値を入れます [ x-size, y-size, z-size ]
+];

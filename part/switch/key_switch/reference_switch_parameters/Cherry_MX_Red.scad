@@ -1,4 +1,5 @@
 include <Cherry_MX.scad>
+include <../../../../utility/color/HSL.scad>
 
 reference_switch_parameters_Cherry_MX_Red = 
   [ // source: https://www.cherrymx.de/en/dev.html

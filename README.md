@@ -14,6 +14,11 @@
 <td><img float="left" alt="example-image-5" src="https://i.imgur.com/pSZbsJ3.png"/>
 <td><img float="left" alt="example-image-6" src="https://i.imgur.com/MmXjsTc.png"/>
 <td><img float="left" alt="example-image-7" src="https://i.imgur.com/3eO2KXM.png"/>
+<tr>
+<td><img float="left" alt="example-image-4" src="https://i.imgur.com/IIJcfj5.png"/>
+<td><img float="left" alt="example-image-5" src="https://i.imgur.com/yXQ4KcP.png"/>
+<td>&nbsp;
+<td><&nbsp;
 </table>
 
 ## Motivation
@@ -29,6 +34,9 @@
     - pipie.scad パイプ
     - shaft.scad シャフト
     - shaft_support_block_T.scad シャフトサポートブロックT型
+    - switch/ スイッチ
+        - key_switch.scad キースイッチ ( 現在はステムの造形のみ対応済み #1 )
+            - stem.scad ステム
 - geometry/ 形状ライブラリー
     - arc.scad 弧を造形
     - chamfered_square.scad 4つの角ごとのC面取り/R面取りに対応した面取り長方形を造形

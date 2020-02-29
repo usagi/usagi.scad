@@ -1,4 +1,6 @@
 include <../../../utility/vector/reverse.scad>
+include <../../../geometry/chamfered_cube.scad>
+include <../../../part/shaft.scad>
 
 /// Cherry MX に近い形状のステムを造形します
 /// @note 実際の Cherry 製のステムには側面のスカート部の下部には僅かに厚みの変化する高さがありますが、
@@ -80,6 +82,16 @@ module key_switch_stem( data )
       , "stem_skirt_side_shrinking"
       , "stem_skirt_bottom_specialization_left"
       , "stem_skirt_bottom_specialization_right"
+
+      , "stem_skirt_splitter"
+      , "splitted_part_enabling"
+      , "stem_skirt_splitted_holes"
+      , "stem_skirt_splitted_craw_width"
+      , "stem_skirt_splitted_craw_thickness"
+      , "stem_skirt_splitted_craw_arm_positions"
+
+      , "stage_additional_antena"
+      , "stage_additional_corner_craw"
     ]
     , data == [ ] ? reference_switch_parameters : data
     );
@@ -106,8 +118,8 @@ module key_switch_stem( data )
   stem_rail_height                    = data[ indices[ 18 ] ][ 1 ];
   stem_skirt_notch_length             = data[ indices[ 19 ] ][ 1 ];
   stem_craw_extruding_map             = data[ indices[ 20 ] ][ 1 ];
-  stem_color                          = data[ indices[ 21 ] ][ 1 ];
-  stem_skirt_color                    = data[ indices[ 22 ] ][ 1 ];
+  stem_color                          = indices[ 21 ] != [ ] ? data[ indices[ 21 ] ][ 1 ] : [ ];
+  stem_skirt_color                    = indices[ 22 ] != [ ] ? data[ indices[ 22 ] ][ 1 ] : stem_color;
 
   stem_cross_x_bar_top_chamfering_parameters          = indices[ 23 ] != [ ] ? data[ indices[ 23 ] ][ 1 ] : [ ];
   stem_cross_x_bar_right_chamfering_parameters        = indices[ 24 ] != [ ] ? data[ indices[ 24 ] ][ 1 ] : [ ];
@@ -155,6 +167,16 @@ module key_switch_stem( data )
   stem_skirt_side_shrinking = data[ indices[ 59 ] ][ 1 ];
   stem_skirt_bottom_specialization_left = data[ indices[ 60 ] ][ 1 ];
   stem_skirt_bottom_specialization_right = data[ indices[ 61 ] ][ 1 ];
+
+  stem_skirt_splitter = data[ indices[ 62 ] ][ 1 ];
+  splitted_part_enabling = data[ indices[ 63 ] ][ 1 ];
+  stem_skirt_splitted_holes          = data[ indices[ 64 ] ][ 1 ];
+  stem_skirt_splitted_craw_width     = data[ indices[ 65 ] ][ 1 ];
+  stem_skirt_splitted_craw_thickness = data[ indices[ 66 ] ][ 1 ];
+  stem_skirt_splitted_craw_arm_positions = data[ indices[ 67 ] ][ 1 ];
+
+  stage_additional_antena       = data[ indices[ 68 ] ][ 1 ];
+  stage_additional_corner_craw  = data[ indices[ 69 ] ][ 1 ];
 
   // 原点で作成した後でハウジングに収まる位置へ移動するための移動量
   translation = 
@@ -260,34 +282,76 @@ module key_switch_stem( data )
     }
   }
 
-  module _rail()
+  module _rail( splitting_mode = 0 )
   {
-    union()
-    {
-      // 太い方
-      translate( [ 0, -stem_rail_width[ 0 ] / 2, -stem_skirt_height[ 0 ] ] )
-      chamfered_cube
-      ( [ stem_rail_thickness, stem_rail_width[ 0 ], stem_rail_height[ 0 ] ]
-      , chamfering_parameters = stem_rail_chamfering_parameters
-      );
-      // 細い方
-      translate( [ 0, -stem_rail_width[ 1 ] / 2, -stem_skirt_height[ 0 ] + stem_rail_height[ 0 ] - stem_rail_chamfering_parameters[ 1 ] ] )
-      chamfered_cube
-      ( [ stem_rail_thickness, stem_rail_width[ 1 ], stem_rail_height[ 1 ] - stem_rail_height[ 0 ] + stem_rail_chamfering_parameters[ 1 ] ]
-      , chamfering_parameters = stem_rail_chamfering_parameters
-      , bottom_chamfering_parameters = [ 0, 0, "C" ]
-      );
-    }
+    let
+    ( // スカート分離とその状況での色分けとOpenSCADの仕様からここでパラメーターを p へ
+      // [ 0:太下端Z, 1:細下端Z, 2:太高さZ, 3:細高さZ, 4:all-面取り, 5:top-面取り, 6:bottom-面取り ] で整理する事にしました。
+      // 意図の読みやすい変数名を採用するかわりに複数の変数の let に2段三項演算子が
+      // 並ぶよりは可読性も保守性もマシだろうと Author は実装当時に考えたのでした。
+      p = 
+        splitting_mode > 0
+          ? [ -stem_skirt_splitter[ 0 ]
+            , -stem_skirt_height[ 0 ] + stem_rail_height[ 0 ] - stem_rail_chamfering_parameters[ 1 ]
+            , stem_rail_height[ 0 ] - ( stem_skirt_height[ 0 ] - stem_skirt_splitter[ 0 ] )
+            , stem_rail_height[ 1 ] - stem_rail_height[ 0 ] + stem_rail_chamfering_parameters[ 1 ]
+            , stem_rail_chamfering_parameters
+            , stem_rail_chamfering_parameters
+            , [ 0, 0, "C" ]
+            ]
+      : splitting_mode < 0
+          ? [ -stem_skirt_height[ 0 ]
+            , -stem_skirt_height[ 0 ] + stem_rail_height[ 0 ] - stem_rail_chamfering_parameters[ 1 ]
+            , stem_skirt_height[ 0 ] - stem_skirt_splitter[ 1 ]
+            , stem_rail_height[ 1 ] - stem_rail_height[ 0 ] + stem_rail_chamfering_parameters[ 1 ]
+            , stem_rail_chamfering_parameters
+            , [ 0, 0, "C" ]
+            , stem_rail_chamfering_parameters
+            ]
+            // ↓:default
+          : [ -stem_skirt_height[ 0 ]
+            , -stem_skirt_height[ 0 ] + stem_rail_height[ 0 ] - stem_rail_chamfering_parameters[ 1 ]
+            , stem_rail_height[ 0 ]
+            , stem_rail_height[ 1 ] - stem_rail_height[ 0 ] + stem_rail_chamfering_parameters[ 1 ]
+            , stem_rail_chamfering_parameters
+            , stem_rail_chamfering_parameters
+            , stem_rail_chamfering_parameters
+            ]
+    )
+      union()
+      {
+        // 太い方
+        translate( [ 0, 0, p[0] ] )
+        chamfered_cube
+        ( [ stem_rail_thickness, stem_rail_width[ 0 ], p[ 2 ] ]
+        , chamfering_parameters = p[ 4 ]
+        , top_chamfering_parameters = p[ 5 ]
+        , bottom_chamfering_parameters = p [ 6 ]
+        , center = [ true, true, false ]
+        );
+        // 細い方
+        if ( stem_rail_width[ 1 ] > 0 )
+        {
+          translate( [ 0, 0, p[1] ] )
+          chamfered_cube
+          ( [ stem_rail_thickness, stem_rail_width[ 1 ], p[ 3 ] ]
+          , chamfering_parameters = p[ 4 ]
+          , top_chamfering_parameters = p[ 5 ]
+          , bottom_chamfering_parameters = [ 0, 0, "C" ]
+          , center = [ true, true, false ]
+          );
+        }
+      }
   }
 
-  module _rails()
+  module _rails( splitting_mode = 0 )
   {
     // rail/right
-    translate( [ stem_stage_size[ 0 ] / 2 - stem_skirt_thickness[ 0 ], 0, 0 ] )
-    _rail();
+    translate( [ +stem_stage_size[ 0 ] / 2, 0, 0 ] )
+    _rail( splitting_mode );
     // rail/left
-    translate( [ -( stem_stage_size[ 0 ] / 2 - stem_skirt_thickness[ 0 ] ) - stem_rail_thickness, 0, 0 ] )
-    _rail();
+    translate( [ -stem_stage_size[ 0 ] / 2, 0, 0 ] )
+    _rail( splitting_mode );
   }
 
   module _side_skirt( avoid_electric_contact = true )
@@ -342,26 +406,79 @@ module key_switch_stem( data )
     polygon( vertices );
   }
 
-  module _stage()
+  // @param splitting_mode 0:全体, >0:分離パターンの上だけ, <0:分離パターンの下だけ
+  module _stage( splitting_mode = 0 )
   {
+    // この汚いやり方は _rail の同様の箇所のコメントを参照
+    // [ 0:translate/z, 1:chamfered_cube/z, 2:chamfered_cube/top_chamfering_parameters ]
+    p = 
+      splitting_mode > 0
+        ? [ -stem_skirt_splitter[ 0 ], stem_skirt_splitter[ 0 ], stem_stage_top_chamfering_parameters ]
+    : splitting_mode < 0
+        ? [ -stem_stage_size[ 2 ], stem_stage_size[ 2 ] - stem_skirt_splitter[ 1 ], [ 0, 0, "C" ] ]
+    // default
+        : [ -stem_stage_size[ 2 ], stem_stage_size[ 2 ], stem_stage_top_chamfering_parameters ]
+      ;
+    
     difference()
     {
-      translate( [ -stem_stage_size[ 0 ] / 2, -stem_stage_size[ 1 ] / 2, -stem_stage_size[ 2 ] ] )
+      translate( [ -stem_stage_size[ 0 ] / 2, -stem_stage_size[ 1 ] / 2, p[ 0 ] ] )
       chamfered_cube
-      ( [ stem_stage_size[ 0 ], stem_stage_size[ 1 ], stem_stage_size[ 2 ] ]
-      , top_chamfering_parameters = stem_stage_top_chamfering_parameters
+      ( [ stem_stage_size[ 0 ], stem_stage_size[ 1 ], p[ 1 ] ]
+      , top_chamfering_parameters = p[ 2 ]
       , front_right_chamfering_parameters = stem_stage_side_chamfering_parameters
       , front_left_chamfering_parameters = stem_stage_side_chamfering_parameters
       , back_right_chamfering_parameters = stem_stage_side_chamfering_parameters
       , back_left_chamfering_parameters = stem_stage_side_chamfering_parameters
       );
-      translate( [ 0, 0, -stem_stage_size[ 2 ] - stem_stage_hole_height * 0.01 ] )
-        cylinder( d = stem_stage_hole_diameter, h = stem_stage_hole_height * 1.01 );
+
+      if ( splitting_mode < 0 )
+      {
+        translate( [ 0, 0, -stem_stage_size[ 2 ] -1.0e-1 ] )
+        linear_extrude( stem_stage_size[ 2 ] - stem_skirt_splitter[ 1 ] + 2.0e-1 )
+          polygon
+          ( concat
+            ( generate_arc_vertices( stem_stage_hole_diameter / 2,  35, 145 )
+            , generate_arc_vertices( stem_stage_hole_diameter / 2, 215, 325 )
+            )
+          );
+      }
+      else
+        translate( [ 0, 0, p[ 0 ] - 1.0e-2 ] )
+          cylinder( d = stem_stage_hole_diameter, h = stem_stage_size[ 2 ] - stem_stage_hole_height + 2.0e-2 );
+    }
+
+    if ( splitting_mode >= 0 )
+    {
+      if ( stage_additional_antena != [ ] )
+        difference()
+        {
+          translate( [ stem_stage_size[ 0 ] / 2 - stage_additional_antena[ 0 ] / 2, 0, -stem_stage_top_chamfering_parameters[ 1 ] ] )
+            cylinder( d = stage_additional_antena[ 0 ], h = stage_additional_antena[ 1 ] + stem_stage_top_chamfering_parameters[ 1 ] );
+          translate( [ stem_stage_size[ 0 ] / 2 - stage_additional_antena[ 0 ] / 2, -stage_additional_antena[ 0 ] / 2, stage_additional_antena[ 1 ] ] )
+            rotate( [ 0, 90 - stage_additional_antena[ 2 ], 0 ] )
+              cube( [ stage_additional_antena[ 0 ] * 2, stage_additional_antena[ 0 ], stage_additional_antena[ 0 ] ] );
+        }
+      
+      if ( stage_additional_corner_craw != [ ] )
+        for ( y = [ +1, -1 ] )
+          for ( x = [ +1, -1 ] )
+            translate
+            ( [ x * ( stem_stage_size[ 0 ] / 2 - stage_additional_corner_craw[ 0 ] / 2 )
+              , y * ( stem_stage_size[ 1 ] / 2 + stage_additional_corner_craw[ 1 ] / 2 - stem_stage_top_chamfering_parameters[ 1 ] / 2 )
+              , stage_additional_corner_craw[ 2 ] / 2 - stem_skirt_splitter[ 0 ]
+              ]
+            )
+              cube
+              ( stage_additional_corner_craw + [ 0, stem_stage_top_chamfering_parameters[ 1 ], 0 ]
+              , center = true
+              );
     }
   }
 
-  module _skirt()
+  module _skirt( splitting_mode = 0 )
   {
+    if ( splitting_mode <= 0 )
     intersection()
     {
       union()
@@ -393,21 +510,23 @@ module key_switch_stem( data )
         {
           front_margin = 2;
           diff_tickness = stem_skirt_thickness[ 0 ] - stem_skirt_thickness[ 2 ];
-          diff_height = stem_bottom_shaft_height - stem_skirt_height[ 2 ];
-          translate( [ -stem_stage_size[ 0 ] / 2 + diff_tickness, -stem_stage_size[ 1 ] / 2 - front_margin, -stem_bottom_shaft_height ] )
+          diff_height = stem_bottom_shaft_height[ 0 ] - stem_skirt_height[ 2 ];
+          translate( [ -stem_stage_size[ 0 ] / 2 + diff_tickness, -stem_stage_size[ 1 ] / 2 - front_margin, -stem_bottom_shaft_height[ 0 ] ] )
           cube
           ( [ stem_stage_size[ 0 ] - diff_tickness * 2
             , stem_stage_size[ 1 ] + front_margin
             , diff_height
             ]
           );
-          translate( [ -stem_stage_size[ 0 ] / 2, -stem_stage_size[ 1 ] / 2 - front_margin, -stem_bottom_shaft_height + diff_height ] )
+          
+          translate( [ -stem_stage_size[ 0 ] / 2, -stem_stage_size[ 1 ] / 2 - front_margin, -stem_bottom_shaft_height[ 0 ] + diff_height ] )
           cube
           ( [ stem_stage_size[ 0 ]
             , stem_stage_size[ 1 ] + front_margin
-            , stem_bottom_shaft_height - diff_height
+            , stem_bottom_shaft_height[ 0 ] - diff_height - ( stem_skirt_splitter != [ ] ? stem_skirt_splitter[ 1 ] : 0 )
             ]
           );
+          
         }
     }
 
@@ -416,32 +535,183 @@ module key_switch_stem( data )
   module _shaft()
   {
     // shaft
-    translate( [ 0, 0, -stem_bottom_shaft_height ] )
-      shaft
-      ( diameter = stem_bottom_shaft_diameter
-      , length = stem_bottom_shaft_height
-      , top_chamfering_angle = 0
-      , top_chamfering_length = 0
-      , bottom_chamfering_angle = stem_bottom_shaft_chamfering_angle
-      , bottom_chamfering_length = stem_bottom_shaft_chamfering_length
+    union()
+    {
+      translate( [ 0, 0, -stem_bottom_shaft_height[ 0 ] ] )
+        shaft
+        ( diameter = stem_bottom_shaft_diameter
+        , length = stem_bottom_shaft_height[ 0 ]
+        , top_chamfering_angle = 0
+        , top_chamfering_length = 0
+        , bottom_chamfering_angle = stem_bottom_shaft_chamfering_angle
+        , bottom_chamfering_length = stem_bottom_shaft_chamfering_length
+        );
+      
+      if ( stem_bottom_shaft_height[ 1 ] > 0 )
+        translate( [ 0, 0, -stem_bottom_shaft_height[ 0 ] - stem_bottom_shaft_height[ 1 ] ] )
+          cylinder
+          ( r = stem_bottom_shaft_diameter / 2 - tan( stem_bottom_shaft_chamfering_angle ) * stem_bottom_shaft_chamfering_length
+          , h = stem_bottom_shaft_height[ 1 ]
+          );
+    }
+  }
+
+  module _stage_skirt_rails( splitting_mode = 0 )
+  {
+    union()
+    {
+      _stage( splitting_mode );
+      _skirt( splitting_mode );
+      _rails( splitting_mode );
+    }
+  }
+
+  module _stem_splitted_body()
+  {
+    _stage_skirt_rails( +1 );
+
+    _shaft();
+    _cross();
+
+    difference()
+    {
+      z1 = ( stem_skirt_splitted_craw_width[ 0 ] / 2 - stem_skirt_splitted_craw_width[ 1 ] / 2 ) / tan( 45 );
+      
+      for ( s = [ +1, -1 ] )
+      {
+        rotate( [ 0, 0, s > 0 ? 0 : 180 ] )
+        {
+          translate
+          ( [ stem_skirt_splitted_craw_arm_positions[ 0 ]
+            , 0
+            , -stem_skirt_splitter[ 0 ] - stem_skirt_splitted_craw_arm_positions[ 1 ] / 2
+            ]
+          )
+            chamfered_cube
+            ( [ stem_skirt_splitted_craw_thickness
+              , stem_skirt_splitted_craw_width[ 0 ]
+              , stem_skirt_splitted_craw_arm_positions[ 1 ] / 2
+              ]
+            , bottom_front_chamfering_parameters = [ 45, z1, "C" ]
+            , bottom_back_chamfering_parameters  = [ 45, z1, "C" ]
+            , center = [ true, true, false ]
+            );
+
+          translate
+          ( [ stem_skirt_splitted_craw_arm_positions[ 0 ]
+            , 0
+            , -stem_skirt_splitter[ 0 ] - stem_skirt_splitted_craw_arm_positions[ 1 ]
+            ]
+          )
+            chamfered_cube
+            ( [ stem_skirt_splitted_craw_thickness
+              , stem_skirt_splitted_craw_width[ 1 ]
+              , stem_skirt_splitted_craw_arm_positions[ 1 ] / 2
+              ]
+            , bottom_left_chamfering_parameters = [ 0, stem_skirt_splitted_craw_thickness / 2, "R" ]
+            , center = [ true, true, false ]
+            );
+          
+          translate
+          ( [ stem_skirt_splitted_craw_arm_positions[ 0 ] + stem_skirt_splitted_craw_thickness / 2
+            , 0
+            , -stem_skirt_splitter[ 0 ] - stem_skirt_splitted_craw_arm_positions[ 1 ]
+            ]
+          )
+            chamfered_cube
+            ( [ stem_skirt_splitted_craw_arm_positions[ 2 ] - ( stem_skirt_splitted_craw_arm_positions[ 0 ] + stem_skirt_splitted_craw_thickness / 2 )
+              , stem_skirt_splitted_craw_width[ 1 ]
+              , stem_skirt_splitted_craw_thickness
+              ]
+            , center = [ false, true, false ]
+            );
+          
+          translate
+          ( [ stem_skirt_splitted_craw_arm_positions[ 2 ]
+            , 0
+            , -stem_skirt_splitter[ 0 ] - stem_skirt_splitted_craw_arm_positions[ 1 ]
+            ]
+          )
+            chamfered_cube
+            ( [ stem_skirt_splitted_craw_arm_positions[ 3 ] - stem_skirt_splitted_craw_arm_positions[ 2 ]
+              , stem_skirt_splitted_craw_width[ 2 ]
+              , stem_skirt_splitted_craw_thickness
+              ]
+            , center = [ false, true, false ]
+            , bottom_right_chamfering_parameters = [ 30, ( stem_skirt_splitted_craw_width[ 2 ] - stem_skirt_splitted_craw_thickness ), "C" ]
+            );
+        }
+      }
+
+      translate( [ 0, 0, -stem_skirt_splitter[ 0 ] - stem_skirt_splitted_craw_arm_positions[ 1 ] ] )
+        cylinder( d = stem_stage_hole_diameter, h = stem_skirt_splitted_craw_arm_positions[ 1 ] * 2 + 2.0e-2, center = true );        
+    }
+  }
+
+  module _stem_splitted_skirt()
+  {
+    difference()
+    {
+      _stage_skirt_rails( -1 );
+
+      // 単純な竪穴を下から上へ掘る(上に hole[2] だけ厚みを残す)
+      z0 = stem_bottom_shaft_height[ 0 ] - stem_stage_size[ 2 ];
+      dz = stem_stage_size[ 2 ] - stem_skirt_splitter[ 1 ];
+      for ( hole = stem_skirt_splitted_holes )
+        translate( [ -hole[ 0 ] / 2, -hole[ 1 ] / 2, -stem_bottom_shaft_height[ 0 ] ] )
+          cube
+          ( [ hole[ 0 ]
+            , hole[ 1 ]
+            , z0 + ( hole[ 2 ] <= 0 ? 1 : ( dz - hole[ 2 ] ) )
+            ]
+          );
+      // 正面から見て菱形を作り両脇のレール上部から内側へのベベルを生成
+      translate( [ 0, 0, -stem_skirt_splitter[ 1 ] ] )
+      scale( [ 1, 1, 15 / 45 ] )
+      rotate( [ 0, 45, 0 ] )
+      cube( [ sqrt( 2 ) * stem_stage_size[ 0 ] / 2, stem_skirt_splitted_holes[ 1 ][ 1 ], sqrt( 2 ) * stem_stage_size[ 0 ] / 2 ], center = true );
+      // レール上部の彫り込み
+      translate( [ stem_stage_size[ 0 ] / 2 + stem_rail_thickness / 2, 0, -stem_skirt_splitter[ 1 ] - stem_rail_chamfering_parameters[ 1 ] ] )
+      chamfered_cube
+      ( [ stem_rail_thickness - stem_rail_chamfering_parameters[ 1 ] * 2
+        , stem_rail_width[ 0 ] - stem_rail_chamfering_parameters[ 1 ] * 2
+        , stem_rail_chamfering_parameters[ 1 ] * 2
+        ]
+      , chamfering_parameters = stem_rail_chamfering_parameters
+      , center = [ true, true, false ]
       );
+      translate( [ -( stem_stage_size[ 0 ] / 2 + stem_rail_thickness / 2 ), 0, -stem_skirt_splitter[ 1 ] - stem_rail_chamfering_parameters[ 1 ] ] )
+      chamfered_cube
+      ( [ stem_rail_thickness - stem_rail_chamfering_parameters[ 1 ] * 2
+        , stem_rail_width[ 0 ] - stem_rail_chamfering_parameters[ 1 ] * 2
+        , stem_rail_chamfering_parameters[ 1 ] * 2
+        ]
+      , chamfering_parameters = stem_rail_chamfering_parameters
+      , center = [ true, true, false ]
+      );
+    }
   }
 
   module _stem()
   {
-    union()
-    {
-      _cross();
-      _shaft();
-      _stage();
-      _skirt();
-      _rails();
+    if ( stem_skirt_splitter == [ ] )
+      // スカート分離しないぱたーん
+      color( stem_color )
+      {
+        _stage_skirt_rails();
+        _shaft();
+        _cross();
+      }
+    else
+    { // スカート分離型ぱたーん
+      if ( splitted_part_enabling[ 0 ] )
+        color( stem_color )
+          _stem_splitted_body();
+      if ( splitted_part_enabling[ 1 ] )
+        color( stem_skirt_color )
+          _stem_splitted_skirt();
     }
   }
 
-  if ( stem_color != [ ] )
-    color( stem_color )
-      _stem();
-  else
-    _stem();
+  _stem();
 }

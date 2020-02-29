@@ -1,4 +1,5 @@
-include <../../../part/switch/key_switch.scad>
+include <../../../../part/switch/key_switch/stem.scad>
+include <../../../../part/switch/key_switch/make_switch_parameters.scad>
 
 //$t = 0;
 $fs = 0.1;
@@ -13,22 +14,22 @@ translate( [ 0, 0, -4 * cos( $t * 360 + 90 ) ] )
 key_switch_stem( make_switch_parameters( "Cherry MX Red" ) );
 
 // Cherry MX Brown を造形
-translate( [ 12, 0, -4 * cos( $t * 360 + 120 ) ] )
-rotate( [ 0, 0, $t * 360 ] )
+translate( [ 15, 0, -4 * cos( $t * 360 + 120 ) ] )
+rotate( [ 0, -$t * 360, 0 ] )
 key_switch_stem( make_switch_parameters( "Cherry MX Brown" ) );
 
 // Cherry MX Blue を造形
-translate( [ 24, 0, -4 * cos( $t * 360 + 150 ) ] )
+translate( [ 30, 0, -4 * cos( $t * 360 + 150 ) ] )
 rotate( [ 0, 0, $t * 360 ] )
-;//key_switch_stem( make_switch_parameters( "Cherry MX Blue" ) );
+key_switch_stem( make_switch_parameters( "Cherry MX Blue" ) );
 
 // Cherry MX Speed Silver を造形
-translate( [ 24, 12, -4 * cos( $t * 360 + 180 ) ] )
+translate( [ 30, 12, -4 * cos( $t * 360 + 180 ) ] )
 rotate( [ 0, $t * 360, 0 ] )
 key_switch_stem( make_switch_parameters( "Cherry MX Speed Silver" ) );
 
 // Invyr UHMWPE Linear を造形
-translate( [ 12, 12, -4 * cos( $t * 360 + 210 ) ] )
+translate( [ 15, 12, -4 * cos( $t * 360 + 210 ) ] )
 rotate( [ $t * 360, 0, 0 ] )
 key_switch_stem( make_switch_parameters( "Invyr UHMWPE Linear" ) );
 
