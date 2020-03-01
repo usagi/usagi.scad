@@ -52,6 +52,8 @@
         - slice_vector.scad 部分要素群を取得
         - translate_vector.scad 座標リストを格納する2次のvectorの座標を平行移動(†1)
         - mirror.scad 2D頂点群からなる vector についてX軸またはY軸の鏡像を成す頂点群または元の頂点群に鏡像部位を追加した頂点群を取得
+        - max_element_of.scad 任意次元の頂点群からなる vector について特定の次元の最大値を取得
+        - min_element_of.scad 任意次元の頂点群からなる vector について特定の次元の最小値を取得
     - number/ 数値ライブラリー
         - count_integer_part_digits.scad 整数部分の桁を取得
         - round_number_to_significant_figures.scad 有効数字で丸めた値を取得

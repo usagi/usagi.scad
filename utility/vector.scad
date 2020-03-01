@@ -9,3 +9,5 @@ include <vector/concat_without_duplication.scad>
 include <vector/keys.scad>
 include <vector/values.scad>
 include <vector/mirror.scad>
+include <vector/max_element_of.scad>
+include <vector/min_element_of.scad>
