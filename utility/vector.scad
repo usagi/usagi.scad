@@ -8,3 +8,4 @@ include <vector/translate_vector.scad>
 include <vector/concat_without_duplication.scad>
 include <vector/keys.scad>
 include <vector/values.scad>
+include <vector/mirror.scad>
