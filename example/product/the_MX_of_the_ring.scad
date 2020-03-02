@@ -1,4 +1,4 @@
-// ザ・エムエックス・オブ・ザ・リングの example です
+// ジ・エムエックス・オブ・ザ・リングの example です
 // モジュールのより詳しい使い方は the_MX_of_the_ring モジュールのコメントもご覧くださいませ
 
 include <../../product/the_MX_of_the_ring.scad>

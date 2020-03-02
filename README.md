@@ -17,7 +17,7 @@
 <tr>
 <td><img float="left" alt="example-image-4" src="https://i.imgur.com/IIJcfj5.png"/>
 <td><img float="left" alt="example-image-5" src="https://i.imgur.com/yXQ4KcP.png"/>
-<td>&nbsp;
+<td><img float="left" alt="example-image-5" src="https://i.imgur.com/qFpfZW4.png"/>
 <td><&nbsp;
 </table>
 
@@ -28,6 +28,8 @@
 
 ## Feature
 
+- product/ 部品を組み合わせた作れるパラメトリック製品ライブラリー
+    - the_MX_of_the_ring.scad "The MX of the ring"; Cherry MX 互換ステムのクロス部分付きの指輪を造形
 - part/ 部品ライブラリー
     - screw.scad JIS規格ねじ ( 次節も参照 )
     - bearing.scad ベアリング
