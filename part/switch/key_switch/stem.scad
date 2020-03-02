@@ -6,7 +6,20 @@ include <../../../part/shaft.scad>
 /// @note 実際の Cherry 製のステムには側面のスカート部の下部には僅かに厚みの変化する高さがありますが、
 ///       スイッチとしての機能にはおそらくまったく関与しないか、むしろ悪い影響があるような気がするので
 ///       その部分は再現しません。
-module key_switch_stem( data )
+/// @param data 造形パラメーターの key-value リストです; example や reference_switch_parameters を参考に与えて下さい
+/// @param enable_cross true:クロス部分を造形します, false:しません
+/// @param enable_stage true:ステージ部分を造形します, false:しません
+/// @param enable_rails true:レール部分を造形します, false:しません
+/// @param enable_shaft true:シャフト部分を造形します, false:しません
+/// @param enable_skirt true:スカート部分を造形します, false:しません
+module key_switch_stem
+( data
+, enable_cross = true
+, enable_stage = true
+, enable_rails = true
+, enable_shaft = true
+, enable_skirt = true
+)
 {
   // data から必要なパラメーター群の index 群を取得
   indices = 
@@ -92,8 +105,8 @@ module key_switch_stem( data )
 
       , "stage_additional_antena"
       , "stage_additional_corner_craw"
-    ]
-    , data == [ ] ? reference_switch_parameters : data
+      ]
+    , data
     );
 
   // data から必要なパラメーター群を取得
@@ -560,9 +573,12 @@ module key_switch_stem( data )
   {
     union()
     {
-      _stage( splitting_mode );
+      if ( enable_stage )
+        _stage( splitting_mode );
+      if ( enable_skirt )
       _skirt( splitting_mode );
-      _rails( splitting_mode );
+      if ( enable_rails )
+        _rails( splitting_mode );
     }
   }
 
@@ -570,8 +586,10 @@ module key_switch_stem( data )
   {
     _stage_skirt_rails( +1 );
 
-    _shaft();
-    _cross();
+    if ( enable_shaft )
+      _shaft();
+    if ( enable_cross )
+      _cross();
 
     difference()
     {
@@ -699,8 +717,10 @@ module key_switch_stem( data )
       color( stem_color )
       {
         _stage_skirt_rails();
-        _shaft();
-        _cross();
+        if ( enable_shaft )
+          _shaft();
+        if ( enable_cross )
+          _cross();
       }
     else
     { // スカート分離型ぱたーん

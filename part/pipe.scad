@@ -51,9 +51,16 @@ module pipe
 , outer_bottom_chamfering_type  = [ ]
 , outer_top_chamfering_type     = [ ]
 
+, chamfering_parameters = [ ]
+
 , center = false
 )
 {
+  let
+  ( chamfering_angle  = chamfering_parameters != [ ] ? chamfering_parameters[ 0 ] : chamfering_angle
+  , chamfering_length = chamfering_parameters != [ ] ? chamfering_parameters[ 1 ] : chamfering_length
+  , chamfering_type   = chamfering_parameters != [ ] ? chamfering_parameters[ 2 ] : chamfering_type
+  )
   translate( [ 0, 0, center ? -length / 2 : 0 ] )
   rotate_extrude()
   translate( [ inner_diameter / 2, 0, 0 ] )

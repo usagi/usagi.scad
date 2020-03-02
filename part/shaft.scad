@@ -16,11 +16,17 @@ module shaft
 , top_chamfering_type       = [ ]
 , bottom_chamfering_type    = [ ]
 
+, chamfering_parameters = [ ]
+
 , center = false
 )
 {
   let
-  ( top_chamfering_angle      = top_chamfering_angle      >  0   ? top_chamfering_angle      : chamfering_angle
+ (  chamfering_angle  = chamfering_parameters != [ ] ? chamfering_parameters[ 0 ] : chamfering_angle
+  , chamfering_length = chamfering_parameters != [ ] ? chamfering_parameters[ 1 ] : chamfering_length
+  , chamfering_type   = chamfering_parameters != [ ] ? chamfering_parameters[ 2 ] : chamfering_type
+
+  , top_chamfering_angle      = top_chamfering_angle      >  0   ? top_chamfering_angle      : chamfering_angle
   , top_chamfering_length     = top_chamfering_length     >  0   ? top_chamfering_length     : chamfering_length
   , top_chamfering_type       = top_chamfering_type       != [ ] ? top_chamfering_type       : chamfering_type
   , bottom_chamfering_angle   = bottom_chamfering_angle   >  0   ? bottom_chamfering_angle   : chamfering_angle
