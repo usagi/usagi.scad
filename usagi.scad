@@ -8,6 +8,8 @@ include <utility/angle/normalize_angle.scad>
 include <coordinate/to_cartesian_from_polar.scad>
 include <geometry/arc.scad>
 include <geometry/chamfered_square.scad>
+include <geometry/chamfered_cube.scad>
+include <geometry/chamfered_hole.scad>
 include <geometry/generate_arc_vertices.scad>
 include <part/bearing.scad>
 include <part/pipe.scad>

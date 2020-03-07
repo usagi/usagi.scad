@@ -17,7 +17,7 @@
 <tr>
 <td><img float="left" alt="example-image-4" src="https://i.imgur.com/IIJcfj5.png"/>
 <td><img float="left" alt="example-image-5" src="https://i.imgur.com/yXQ4KcP.png"/>
-<td><img float="left" alt="example-image-5" src="https://i.imgur.com/qFpfZW4.png"/>
+<td><img float="left" alt="example-image-6" src="https://i.imgur.com/qFpfZW4.png"/>
 <td><&nbsp;
 </table>
 
@@ -43,6 +43,7 @@
     - arc.scad 弧を造形
     - chamfered_square.scad 4つの角ごとのC面取り/R面取りに対応した面取り長方形を造形
     - chamfered_cube.scad 12の角ごとのC面取り/R面取りに対応した面取り立方体を造形
+    - chamfered_hole.scad 立方体または円柱形の穴を開け、その開口部を面取りするための difference 用形状を造形
     - generate_arc_vertices.scad 弧の頂点群を生成
 - utility
     - vector/ vectorライブラリー
