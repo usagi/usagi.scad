@@ -9,6 +9,11 @@ $fa = 5;
 translate( [ -15, 0, -4 * cos( $t * 360 + 60 ) ] )
 key_switch_stem( make_switch_parameters( "Kailh Choc Red" ) );
 
+// Choc Red Linear を造形
+translate( [ -30, 0, -4 * cos( $t * 360 + 30 ) ] )
+rotate( [ 0, -$t * 360, 0 ] )
+key_switch_stem( make_switch_parameters( "Kailh Choc Brown" ) );
+
 // Cherry MX Red を造形
 translate( [ 0, 0, -4 * cos( $t * 360 + 90 ) ] )
 key_switch_stem( make_switch_parameters( "Cherry MX Red" ) );
