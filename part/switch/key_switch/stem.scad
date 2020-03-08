@@ -1,5 +1,7 @@
 include <../../../utility/vector/reverse.scad>
 include <../../../geometry/chamfered_cube.scad>
+include <../../../geometry/chamfered_hole.scad>
+include <../../../geometry/rounded_cube.scad>
 include <../../../part/shaft.scad>
 
 /// Cherry MX に近い形状のステムを造形します
@@ -7,14 +9,192 @@ include <../../../part/shaft.scad>
 ///       スイッチとしての機能にはおそらくまったく関与しないか、むしろ悪い影響があるような気がするので
 ///       その部分は再現しません。
 /// @param data 造形パラメーターの key-value リストです; example や reference_switch_parameters を参考に与えて下さい
-/// @param enable_cross true:クロス部分を造形します, false:しません
+/// @param enable_cap_connector true:クロス部分を造形します, false:しません
 /// @param enable_stage true:ステージ部分を造形します, false:しません
 /// @param enable_rails true:レール部分を造形します, false:しません
 /// @param enable_shaft true:シャフト部分を造形します, false:しません
 /// @param enable_skirt true:スカート部分を造形します, false:しません
 module key_switch_stem
 ( data
-, enable_cross = true
+, enable_cap_connector = true
+, enable_stage = true
+, enable_rails = true
+, enable_shaft = true
+, enable_skirt = true
+)
+{
+  type_index = search( [ "type" ], data )[ 0 ];
+  if ( type_index != [ ] )
+  {
+    type = data[ type_index ][ 1 ];
+    if ( type == "MX" )
+      _key_switch_stem_MX( data, enable_cap_connector, enable_stage, enable_rails, enable_shaft, enable_skirt );
+    else if ( type == "Choc" )
+      _key_switch_stem_Choc( data, enable_cap_connector, enable_stage, enable_rails, enable_shaft, enable_skirt );
+    else
+      echo( str( "key_switch_stem: 不明な type (", type, ") です。 MX または Choc の何れかにしか対応していません。" ) );
+  }
+}
+
+module _key_switch_stem_Choc
+( data
+, enable_cap_connector = true
+, enable_stage = true
+, enable_rails = true
+, enable_shaft = true
+, enable_skirt = true
+)
+{
+  indices = 
+    search
+    ( [ "top_hole_distance"
+      , "top_hole_size"
+      , "stage_hole_apertural_angle"
+      , "stage_hole_apertural_length"
+      , "stage_size"
+      , "stage_r"
+      , "shaft_size"
+      , "bottom_hole_size"
+      , "side_wing_size"
+      , "front_rail_outer_size"
+      , "front_rail_outer_thickness"
+      , "front_rail_profile"
+      , "craw_profile"
+      , "craw_width"
+      , "stage_longitudinal_hole_width"
+      , "stage_longitudinal_holle_margin"
+      , "stem_color"
+      , "shaft_chamfering_parameters"
+      ]
+    , data
+    );
+
+  // data から必要なパラメーター群を取得
+  top_hole_distance               = data[ indices[  0 ] ][ 1 ];
+  top_hole_size                   = data[ indices[  1 ] ][ 1 ];
+  stage_hole_apertural_angle      = data[ indices[  2 ] ][ 1 ];
+  stage_hole_apertural_length     = data[ indices[  3 ] ][ 1 ];
+  stage_size                      = data[ indices[  4 ] ][ 1 ];
+  stage_r                         = data[ indices[  5 ] ][ 1 ];
+  shaft_size                      = data[ indices[  6 ] ][ 1 ];
+  bottom_hole_size                = data[ indices[  7 ] ][ 1 ];
+  side_wing_size                  = data[ indices[  8 ] ][ 1 ];
+  front_rail_outer_size           = data[ indices[  9 ] ][ 1 ];
+  front_rail_outer_thickness      = data[ indices[ 10 ] ][ 1 ];
+  front_rail_profile              = data[ indices[ 11 ] ][ 1 ];
+  craw_profile                    = data[ indices[ 12 ] ][ 1 ];
+  craw_width                      = data[ indices[ 13 ] ][ 1 ];
+  stage_longitudinal_hole_width   = data[ indices[ 14 ] ][ 1 ];
+  stage_longitudinal_holle_margin = data[ indices[ 15 ] ][ 1 ];
+  stem_color                      = data[ indices[ 16 ] ][ 1 ];
+  shaft_chamfering_parameters     = data[ indices[ 17 ] ][ 1 ];
+
+  module _stage()
+  {
+    translate( [ 0, 0, -stage_size[ 2 ] ] )
+      rounded_cube( stage_size, stage_r, center = [ true, true, false ] );
+  }
+
+  module _top_holes()
+  {
+    for ( x = [ +1, -1 ] )
+      translate( [ x * top_hole_distance / 2, 0, 0 ] )
+        chamfered_hole( top_hole_size, apertural_angle = stage_hole_apertural_angle, apertural_length = stage_hole_apertural_length, center = true );
+  }
+
+  module _front_rail()
+  {
+    difference()
+    {
+      front_rail_size = [ front_rail_outer_size[ 0 ] , front_rail_outer_size[ 1 ] + stage_r * 2, stage_size[ 2 ] ];
+      translate( [ 0, -stage_size[ 1 ] / 2 - front_rail_outer_size[ 1 ], -stage_size[ 2 ] ] )
+        rounded_cube( front_rail_size, stage_r, center = [ true, false, false ] );
+      
+
+      echo( front_rail_profile, len( front_rail_profile ) );
+
+      profile_first = front_rail_profile[ 0 ];
+      profile_last  = front_rail_profile[ len( front_rail_profile ) - 1 ];
+
+      vertices = 
+        [ [ profile_first[ 0 ], -1 ]
+        , for ( v = front_rail_profile )
+            v
+        , [ profile_last[ 0 ], -1 ]
+        ];
+      
+      echo( vertices );
+
+      translate( [ 0, -stage_size[ 1 ] / 2 - front_rail_outer_size[ 1 ], 0 ] )
+      // rotate( [ 0, 0, 90 ] )
+         rotate( [ 0, 90, 0 ] )
+      //     rotate( [ 90, 0, 0 ] )
+            linear_extrude( front_rail_outer_size[ 0 ] - front_rail_outer_thickness * 2, center = true )
+              polygon( vertices );
+    }
+  }
+
+  module _side_rail()
+  {
+    dx = stage_r * 2;
+    s = side_wing_size + [ dx, 0, 0 ];
+    translate( [ -dx, 0, -stage_size[ 2 ] ] )
+      rounded_cube( s, stage_r, center = [ false, true, false ] );
+  }
+
+  module _side_rails()
+  {
+    for ( x = [ +1, -1 ] )
+      rotate( [ 0, 0, x > 0 ? 0 : 180 ] )
+        translate( [ stage_size[ 0 ] / 2, 0, 0 ] )
+          _side_rail();
+  }
+
+  module _stage_bottom_hole()
+  {
+    translate( [ 0, 0, -stage_size[ 2 ] ] )
+      rotate( [ 180, 0, 0 ] )
+        chamfered_hole( bottom_hole_size, hole_type = "cylinder", apertural_angle = stage_hole_apertural_angle, apertural_length = stage_hole_apertural_length, center = true );
+  }
+
+  module _shaft()
+  {
+    translate( [ 0, 0, -shaft_size[ 1 ] ] )
+      shaft( shaft_size[ 0 ], shaft_size[ 1 ] - 1.0e-2, chamfering_parameters = shaft_chamfering_parameters );
+  }
+
+  color( stem_color )
+  union()
+  {
+    // stage
+    if ( enable_stage )
+      difference()
+      {
+        union()
+        {
+          _stage();
+          _front_rail();
+        }
+
+        if ( enable_cap_connector )
+          _top_holes();
+        
+        _stage_bottom_hole();
+      }
+    
+    // side rails
+    if ( enable_rails )
+      _side_rails();
+    
+    // shaft
+    if ( enable_shaft )
+      _shaft();
+  }
+}
+
+module _key_switch_stem_MX
+( data
+, enable_cap_connector = true
 , enable_stage = true
 , enable_rails = true
 , enable_shaft = true
@@ -588,7 +768,7 @@ module key_switch_stem
 
     if ( enable_shaft )
       _shaft();
-    if ( enable_cross )
+    if ( enable_cap_connector )
       _cross();
 
     difference()
@@ -719,7 +899,7 @@ module key_switch_stem
         _stage_skirt_rails();
         if ( enable_shaft )
           _shaft();
-        if ( enable_cross )
+        if ( enable_cap_connector )
           _cross();
       }
     else

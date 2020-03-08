@@ -5,6 +5,10 @@ include <../../../../part/switch/key_switch/make_switch_parameters.scad>
 $fs = 0.1;
 $fa = 5;
 
+// Choc Red Linear を造形
+translate( [ -15, 0, -4 * cos( $t * 360 + 60 ) ] )
+key_switch_stem( make_switch_parameters( "Kailh Choc Red" ) );
+
 // Cherry MX Red を造形
 translate( [ 0, 0, -4 * cos( $t * 360 + 90 ) ] )
 key_switch_stem( make_switch_parameters( "Cherry MX Red" ) );
