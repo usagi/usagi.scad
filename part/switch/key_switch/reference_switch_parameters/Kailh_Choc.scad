@@ -15,8 +15,9 @@ reference_switch_parameters_Kailh_Choc =
   , [ "front_rail_outer_size", [ 3.01, 1.16 ] ]
   , [ "front_rail_outer_thickness", 0.5 ]
   //, [ "rail_profile", [ ] ] // レール内のステージ上面からの深さ(-Z) に対するステージ前面からの押し出し長さ(-Y)のリスト [ [-Z0, -Y0], [-Z1, -Y1], ...  ]
-  , [ "craw_profile", [ ] ] // Kailh Choc White などクリッキー系にある背面の爪のプロファイル。ステージ上面からの深さ(-Z)に対するステージ背面からの押し出し長さ(+Y)のリスト
-  , [ "craw_width", 0 ]
+  //, [ "back_craw_profile", [ ] ] // Kailh Choc White などクリッキー系にある背面の爪のプロファイル。ステージ上面からの深さ(-Z)に対するステージ背面からの押し出し長さ(+Y)のリスト
+  , [ "back_craw_width", 0.6 ] // X軸幅
+  , [ "back_craw_position", -3.2 ] // ステージの中心(造形ローカル座標系原点)から爪の中心部までの長さ(X軸位置)
   , [ "stage_longitudinal_hole_width", 1 ] // 穴の横幅(x)だけ与えれば出入り口の縦幅は2倍、中央の縦幅は1倍でうまいこと生成します
-  , [ "stage_longitudinal_holle_margin", 0.3 ] // 穴の周囲に残す掘らない部分の長さ(下げるとステージの左右と下までのマージンが減ります)
+  , [ "stage_longitudinal_hole_position", [ 4.3, -3.5 ] ] // 穴の位置 [ x, z ]
   ];

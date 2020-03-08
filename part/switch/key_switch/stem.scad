@@ -59,10 +59,11 @@ module _key_switch_stem_Choc
       , "front_rail_outer_size"
       , "front_rail_outer_thickness"
       , "front_rail_profile"
-      , "craw_profile"
-      , "craw_width"
+      , "back_craw_profile"
+      , "back_craw_width"
+      , "back_craw_position"
       , "stage_longitudinal_hole_width"
-      , "stage_longitudinal_holle_margin"
+      , "stage_longitudinal_hole_position"
       , "stem_color"
       , "shaft_chamfering_parameters"
       ]
@@ -70,24 +71,25 @@ module _key_switch_stem_Choc
     );
 
   // data から必要なパラメーター群を取得
-  top_hole_distance               = data[ indices[  0 ] ][ 1 ];
-  top_hole_size                   = data[ indices[  1 ] ][ 1 ];
-  stage_hole_apertural_angle      = data[ indices[  2 ] ][ 1 ];
-  stage_hole_apertural_length     = data[ indices[  3 ] ][ 1 ];
-  stage_size                      = data[ indices[  4 ] ][ 1 ];
-  stage_r                         = data[ indices[  5 ] ][ 1 ];
-  shaft_size                      = data[ indices[  6 ] ][ 1 ];
-  bottom_hole_size                = data[ indices[  7 ] ][ 1 ];
-  side_wing_size                  = data[ indices[  8 ] ][ 1 ];
-  front_rail_outer_size           = data[ indices[  9 ] ][ 1 ];
-  front_rail_outer_thickness      = data[ indices[ 10 ] ][ 1 ];
-  front_rail_profile              = data[ indices[ 11 ] ][ 1 ];
-  craw_profile                    = data[ indices[ 12 ] ][ 1 ];
-  craw_width                      = data[ indices[ 13 ] ][ 1 ];
-  stage_longitudinal_hole_width   = data[ indices[ 14 ] ][ 1 ];
-  stage_longitudinal_holle_margin = data[ indices[ 15 ] ][ 1 ];
-  stem_color                      = data[ indices[ 16 ] ][ 1 ];
-  shaft_chamfering_parameters     = data[ indices[ 17 ] ][ 1 ];
+  top_hole_distance                 = data[ indices[  0 ] ][ 1 ];
+  top_hole_size                     = data[ indices[  1 ] ][ 1 ];
+  stage_hole_apertural_angle        = data[ indices[  2 ] ][ 1 ];
+  stage_hole_apertural_length       = data[ indices[  3 ] ][ 1 ];
+  stage_size                        = data[ indices[  4 ] ][ 1 ];
+  stage_r                           = data[ indices[  5 ] ][ 1 ];
+  shaft_size                        = data[ indices[  6 ] ][ 1 ];
+  bottom_hole_size                  = data[ indices[  7 ] ][ 1 ];
+  side_wing_size                    = data[ indices[  8 ] ][ 1 ];
+  front_rail_outer_size             = data[ indices[  9 ] ][ 1 ];
+  front_rail_outer_thickness        = data[ indices[ 10 ] ][ 1 ];
+  front_rail_profile                = data[ indices[ 11 ] ][ 1 ];
+  back_craw_profile                 = indices[ 12 ] != [] ? data[ indices[ 12 ] ][ 1 ] : [];
+  back_craw_width                   = data[ indices[ 13 ] ][ 1 ];
+  back_craw_position                = data[ indices[ 14 ] ][ 1 ];
+  stage_longitudinal_hole_width     = data[ indices[ 15 ] ][ 1 ];
+  stage_longitudinal_hole_position = data[ indices[ 16 ] ][ 1 ];
+  stem_color                        = data[ indices[ 17 ] ][ 1 ];
+  shaft_chamfering_parameters       = data[ indices[ 18 ] ][ 1 ];
 
   module _stage()
   {
@@ -110,9 +112,6 @@ module _key_switch_stem_Choc
       translate( [ 0, -stage_size[ 1 ] / 2 - front_rail_outer_size[ 1 ], -stage_size[ 2 ] ] )
         rounded_cube( front_rail_size, stage_r, center = [ true, false, false ] );
       
-
-      echo( front_rail_profile, len( front_rail_profile ) );
-
       profile_first = front_rail_profile[ 0 ];
       profile_last  = front_rail_profile[ len( front_rail_profile ) - 1 ];
 
@@ -123,8 +122,6 @@ module _key_switch_stem_Choc
         , [ profile_last[ 0 ], -1 ]
         ];
       
-      echo( vertices );
-
       translate( [ 0, -stage_size[ 1 ] / 2 - front_rail_outer_size[ 1 ], 0 ] )
       // rotate( [ 0, 0, 90 ] )
          rotate( [ 0, 90, 0 ] )
@@ -163,6 +160,56 @@ module _key_switch_stem_Choc
       shaft( shaft_size[ 0 ], shaft_size[ 1 ] - 1.0e-2, chamfering_parameters = shaft_chamfering_parameters );
   }
 
+  module _back_craw()
+  {
+    if ( back_craw_profile != [ ] )
+    {
+      profile_first = back_craw_profile[ 0 ];
+      profile_last  = back_craw_profile[ len( back_craw_profile ) - 1 ];
+      
+      vertices = 
+        [ [ profile_first[ 0 ], -1 ]
+        , for ( v = back_craw_profile )
+            v
+        , [ profile_last[ 0 ], -1 ]
+        ];
+      
+      translate( [ back_craw_position, stage_size[ 1 ] / 2, 0 ] )
+        rotate( [ 0, 90, 0 ] )
+          linear_extrude( back_craw_width )
+            polygon( vertices );
+    }
+  }
+
+  module _stage_longitudinal_hole()
+  {
+    vertices = 
+      [ [ +0.5 * stage_longitudinal_hole_width, 0                         ]
+      , [ +1.5 * stage_longitudinal_hole_width, +stage_size[ 1 ]          ]
+      , [ +1.5 * stage_longitudinal_hole_width, +stage_size[ 1 ] + 1.0e-2 ]
+      , [ -1.5 * stage_longitudinal_hole_width, +stage_size[ 1 ] + 1.0e-2 ]
+      , [ -1.5 * stage_longitudinal_hole_width, +stage_size[ 1 ]          ]
+      , [ -0.5 * stage_longitudinal_hole_width, 0                         ]
+      , [ -1.5 * stage_longitudinal_hole_width, -stage_size[ 1 ]          ]
+      , [ -1.5 * stage_longitudinal_hole_width, -stage_size[ 1 ] - 1.0e-2 ]
+      , [ +1.5 * stage_longitudinal_hole_width, -stage_size[ 1 ] - 1.0e-2 ]
+      , [ +1.5 * stage_longitudinal_hole_width, -stage_size[ 1 ]          ]
+      ];
+
+    rotate( [ 0, 90, 0 ] )
+      linear_extrude( stage_longitudinal_hole_width, center = true )
+        polygon( vertices );
+  }
+
+  module _stage_longitudinal_holes()
+  {
+    if ( stage_longitudinal_hole_position != [ ] )
+      for ( x = [ +1, -1 ] )
+        rotate( [ 0, 0, x > 0 ? 0 : 180 ] )
+          translate( [ stage_longitudinal_hole_position[ 0 ], 0, stage_longitudinal_hole_position[ 1 ] ] )
+            _stage_longitudinal_hole();
+  }
+
   color( stem_color )
   union()
   {
@@ -174,12 +221,15 @@ module _key_switch_stem_Choc
         {
           _stage();
           _front_rail();
+          _back_craw();
         }
 
         if ( enable_cap_connector )
           _top_holes();
         
         _stage_bottom_hole();
+
+        _stage_longitudinal_holes();
       }
     
     // side rails

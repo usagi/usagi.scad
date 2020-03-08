@@ -38,7 +38,7 @@
     - shaft_support_block_T.scad シャフトサポートブロックT型
     - switch/ スイッチ
         - key_switch.scad キースイッチ ( 現在はステムの造形のみ対応済み #1 )
-            - stem.scad ステム
+            - stem.scad ステム ( 現在は Cherry MX 互換系, Kailh Choc 互換系のみ対応済み )
 - geometry/ 形状ライブラリー
     - arc.scad 弧を造形
     - chamfered_square.scad 4つの角ごとのC面取り/R面取りに対応した面取り長方形を造形

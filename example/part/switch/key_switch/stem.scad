@@ -14,6 +14,11 @@ translate( [ -30, 0, -4 * cos( $t * 360 + 30 ) ] )
 rotate( [ 0, -$t * 360, 0 ] )
 key_switch_stem( make_switch_parameters( "Kailh Choc Brown" ) );
 
+// Invyr UHMWPE Linear を造形
+translate( [ -30, 12, -4 * cos( $t * 360 + 210 ) ] )
+rotate( [ $t * 360, 0, 0 ] )
+key_switch_stem( make_switch_parameters( "Kailh Choc White" ) );
+
 // Cherry MX Red を造形
 translate( [ 0, 0, -4 * cos( $t * 360 + 90 ) ] )
 key_switch_stem( make_switch_parameters( "Cherry MX Red" ) );
